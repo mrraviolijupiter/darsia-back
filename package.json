@@ -6,7 +6,9 @@
   "keywords": [],
   "dependencies": {
     "sails": "^1.2.3",
+    "grunt": "1.0.4",
     "sails-hook-apianalytics": "^2.0.3",
+    "sails-hook-grunt": "^3.0.2",
     "sails-hook-organics": "^0.16.0",
     "sails-hook-orm": "^2.1.1",
     "sails-hook-sockets": "^2.0.0",
@@ -18,11 +20,11 @@
     "eslint": "5.16.0",
     "htmlhint": "0.11.0",
     "lesshint": "6.3.6",
-    "grunt": "1.0.4",
+    "@sailshq/eslint": "^4.19.3",
     "sails-hook-grunt": "^4.0.0"
   },
   "scripts": {
-    "start": "NODE_ENV=production node app.js",
+    "start": "sails lift",
     "test": "npm run lint && npm run custom-tests && echo 'Done.'",
     "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look so good.' && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/**/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/**/**/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/**/**/**/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/**/**/**/**/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/**/**/**/**/**/**/*.ejs && echo '✔  So do your .ejs files.' && ./node_modules/lesshint/bin/lesshint assets/styles/ --max-warnings=0 && echo '✔  Your .less files look good, too.'",
     "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
