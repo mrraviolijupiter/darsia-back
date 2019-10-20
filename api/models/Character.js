@@ -15,7 +15,7 @@ module.exports = {
     name: {
       type: 'string',
       required: true,
-      //unique: true,
+      unique: true,
       maxLength: 200,
       example: '_xXRobertitoXx_'
     },
@@ -23,7 +23,9 @@ module.exports = {
       model: 'User',
     },
 
-    // TODO: add relation with StatTable
+    stats: {
+      model: 'StatTable',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

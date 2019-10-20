@@ -91,6 +91,17 @@ module.exports.custom = {
   * Any other custom config this Sails app should use during development.    *
   *                                                                          *
   ***************************************************************************/
-  // …
+  stats:{
+    healthPoints: [0,100,200,300,400,500,600],
+    healthRegeneration: [0,1,2,3,4,5,6],
+    attackDamage: [0,10,20,30,40,50,60],
+    armor:[0,20,30,40,50,60],
+  },
 
+  startCharacterStats:{
+    healthPoints: 10,
+    healthRegeneration: 1,
+    attackDamage: 1,
+    armor: 1,
+  }
 };
