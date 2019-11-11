@@ -63,4 +63,5 @@ module.exports.routes = {
   'POST  /api/v1/deliver-contact-form-message':          { action: 'deliver-contact-form-message' },
 
   'POST  /api/v1/account/create-character':                       { action: 'account/create-character' },
+  'GET  /api/v1/account/get-account-info':                       { action: 'account/get-account-info' },
 };
