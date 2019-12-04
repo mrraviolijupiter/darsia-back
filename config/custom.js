@@ -103,5 +103,11 @@ module.exports.custom = {
     healthRegeneration: 1,
     attackDamage: 1,
     armor: 1,
-  }
+  },
+
+  arena:{
+    size: 5,
+  },
+
+
 };

@@ -107,7 +107,8 @@ and exposed as \`req.me\`.)`
     // Modify the active session instance.
     // (This will be persisted when the response is sent.)
     this.req.session.userId = userRecord.id;
-
+    sails.sockets.broadcast('feed','MyEv' +
+      'ent', {'auto':'pepe'});
   }
 
 };
