@@ -17,6 +17,7 @@ that we test out the front-back communication
 | - | - |
 | `request_map_info` 1 | `EMPTY_PAYLOAD` |
 | `try_move` 1 | `{ direction: DIRECTION }` |
+| `try_attack` 1 | `{ targetId: int }` |
 | `try_leave` 1 | `EMPTY_PAYLOAD ` |
 
 # Server emitted messages
@@ -26,6 +27,7 @@ that we test out the front-back communication
 | `goto` 1 | `{ where: MAP }` |`
 | `map_info` 1 | `{ pawns: [CHARACTER_PAWN] }` |`
 | `move` * | `{ characterId: int, from: BOARD_COORDINATE, to: BOARD_COORDINATE }` |`
+| `attack` * | `{ aggressorId: int, targetId: int, type: HIT_TYPE, damage: float }` |`
 | `leave` * | `{ characterId: int }` |`
 
 # Type definitions
@@ -34,4 +36,15 @@ that we test out the front-back communication
 - `DIRECTION := "N" | "E" | "S" | "W"`
 - `BOARD_COORDINATE := { x: int, y: int }`
 - `CHARACTER_PAWN :=
-  { id: int, location: BOARD_COORDINATE, front: DIRECTION, color: int }`
+  { id: int, location: BOARD_COORDINATE, front: DIRECTION, color: int, baseStats: STATS }`
+- ```js
+  STATS := {
+    health: float,
+    damage: float,
+    range: [BOARD_COORDINATE],
+    evasionRate:  float[0, 1],
+    criticalRate: float[0, 1],
+    criticalMultiplier: float,
+  }
+```
+- `HIT_TYPE := "hit" | "miss" | "critical"`
