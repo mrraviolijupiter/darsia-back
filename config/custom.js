@@ -92,22 +92,35 @@ module.exports.custom = {
   *                                                                          *
   ***************************************************************************/
   stats:{
-    healthPoints: [0,100,200,300,400,500,600],
-    healthRegeneration: [0,1,2,3,4,5,6],
-    attackDamage: [0,10,20,30,40,50,60],
-    armor:[0,20,30,40,50,60],
-  },
-
-  startCharacterStats:{
-    healthPoints: 10,
-    healthRegeneration: 1,
-    attackDamage: 1,
-    armor: 1,
+    health: 100.6,
+    damage: 4.6,
+    movement: 4,
+    range: null,
+    evasionRate:  0.1,
+    criticalRate: 0.2,
+    criticalMultiplier: 1.5,
   },
 
   arena:{
-    size: 5,
+    size: 3,
   },
 
+  activeArenas:{
+    currentArenas: [null],
+  },
 
+  DIRECTION: {
+    N: 'north',
+    S: 'south',
+    E: 'east',
+    W: 'west',
+  },
+
+  defaultPawnStats:{
+    location:{
+      x: 1,
+      y: 1,
+    },
+    direction: 'north',
+  },
 };

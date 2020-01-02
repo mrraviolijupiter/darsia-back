@@ -13,24 +13,39 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-    healthPoints: {
+    health: {
       type: 'number',
-      defaultsTo: sails.config.custom.startCharacterStats.healthPoints,
+      defaultsTo: sails.config.custom.stats.health,
     },
 
-    healthRegeneration: {
+    damage: {
       type: 'number',
-      defaultsTo: sails.config.custom.startCharacterStats.healthRegeneration,
+      defaultsTo: sails.config.custom.stats.damage,
     },
 
-    attackDamage: {
+    movement: {
       type: 'number',
-      defaultsTo: sails.config.custom.startCharacterStats.attackDamage,
+      defaultsTo: sails.config.custom.stats.movement,
     },
 
-    armor: {
+    range: {
+      type: 'json',
+      defaultsTo: sails.config.custom.stats.range,
+    },
+
+    evasionRate: {
       type: 'number',
-      defaultsTo: sails.config.custom.startCharacterStats.armor,
+      defaultsTo: sails.config.custom.stats.evasionRate,
+    },
+
+    criticalRate: {
+      type: 'number',
+      defaultsTo: sails.config.custom.stats.criticalRate,
+    },
+
+    criticalMultiplier: {
+      type: 'number',
+      defaultsTo: sails.config.custom.stats.criticalMultiplier,
     },
 
     //etc,etc

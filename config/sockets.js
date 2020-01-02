@@ -15,6 +15,18 @@ class PhysicalCharacter{
   }
 }
 
+let events = [
+  {
+    triggerName:'request_map_info',
+    callback: function (payload,session,socket) {
+      //return here map info
+      sails.log.debug(session);
+      socket.emit('map_info', { players: 'por ahora nada xd' });
+      sails.log.debug(payload );//+ arenaID);
+    }
+  }
+];
+
 module.exports.sockets = {
 
   /***************************************************************************
@@ -33,19 +45,11 @@ module.exports.sockets = {
   *                                                                          *
   ***************************************************************************/
 
-  // transports: [ 'websocket' ],
+  // transports: [ 'websocket' ]
+
   onConnect: async function(session, socket) {
-    let arenaID = await sails.helpers.joinArena(socket);
-    socket.emit('goto', { where: 'arena' });
-    socket.on('request_map_info', payload => {
-      //return here map info
-      sails.log.debug(session);
-      socket.emit('map_info', { players: 'por ahora nada xd' });
-      sails.log.debug(payload + arenaID);
-    });
-    // By default: do nothing
-    // This is a good place to subscribe a new socket to a room, inform other users
-    // that someone new has come online, or any other custom socket.io logic
+    // Notify new connection
+    await sails.helpers.notifications.newConnection(socket);
   },
   /***************************************************************************
   *                                                                          *

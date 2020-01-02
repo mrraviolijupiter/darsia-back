@@ -26,6 +26,9 @@ module.exports = {
     stats: {
       model: 'StatTable',
     },
+    characterPawn:{
+      type: 'json',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
