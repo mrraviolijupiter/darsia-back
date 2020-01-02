@@ -15,7 +15,7 @@ that we test out the front-back communication
 
 | Event | Payload |
 | - | - |
-| `request_map_info` 1 | `EMPTY_PAYLOAD` |
+| `request_map_info` 1 | `{ id: int } //id de la arena` |
 | `try_move` 1 | `{ targetLocation: BOARD_COORDINATE }` |
 | `try_attack` 1 | `{ targetId: int }` |
 | `try_leave` 1 | `EMPTY_PAYLOAD ` |
@@ -24,7 +24,7 @@ that we test out the front-back communication
 
 | Event | Payload |
 | - | - |
-| `goto` 1 | `{ where: MAP }` |`
+| `goto` 1 | `{ where: MAP, id: int } //Id de la arena` |`
 | `map_info` 1 | `{ characters: [CHARACTER] }` |`
 | `move` 1 / * | `{ characterId: int, path: [BOARD_COORDINATE] }` |`
 | `attack` * | `{ aggressorId: int, targetId: int, type: HIT_TYPE, damage: float }` |`
@@ -35,7 +35,7 @@ that we test out the front-back communication
 - `EMPTY_PAYLOAD := "" or null or {}` *(be consistent)*
 - `DIRECTION := "N" | "E" | "S" | "W"`
 - `BOARD_COORDINATE := { x: int, y: int }`
-- `CHARACTER := { pawn: CHARACTER_PAWN, baseStats: STATS, color: int, id: int }`
+- `CHARACTER := { characterPawn: CHARACTER_PAWN, baseStats: STATS, name: string , color: int, id: int }`
 - `CHARACTER_PAWN :=
   { location: BOARD_COORDINATE, front: DIRECTION, currentStats: STATS }`
 - ```js
