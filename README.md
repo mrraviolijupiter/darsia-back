@@ -14,7 +14,7 @@ that we test out the front-back communication
 # Client emitted messages
 
 ```js
-1 request_map_info { id: int } // id de la arena
+1 request_map_info EMPTY_PAYLOAD
 1 try_move { targetLocation: BOARD_COORDINATE }
 1 try_attack { targetId: int }
 1 try_leave EMPTY_PAYLOAD
@@ -23,8 +23,7 @@ that we test out the front-back communication
 # Server emitted messages
 
 ```js
-// event payload
-1 goto { where: MAP, id: int } // Id de la arena
+1 goto { where: MAP }
 1 map_info { characters: [CHARACTER] }
 1|* move { characterId: int, path: [BOARD_COORDINATE] }
 * attack { aggressorId: int, targetId: int, type: HIT_TYPE, damage: float }
@@ -39,7 +38,7 @@ MAP := "arena" | "menu"
 DIRECTION := "N" | "E" | "S" | "W"
 BOARD_COORDINATE := { x: int, y: int }
 CHARACTER := {
-  characterPawn: CHARACTER_PAWN,
+  pawn: CHARACTER_PAWN,
   baseStats: STATS,
   name: string,
   color: int,
@@ -59,5 +58,5 @@ STATS := {
   criticalRate: float[0, 1],
   criticalMultiplier: float,
 }
-HIT_TYPE := "hit" | "miss" | "critical"
+HIT_TYPE := "regular" | "miss" | "critical"
 ```
