@@ -15,6 +15,8 @@ that we test out the front-back communication
 
 ```js
 1 request_map_info EMPTY_PAYLOAD
+1 match_ready_confirm EMPTY_PAYLOAD
+1 try_pass EMPTY_PAYLOAD
 1 try_move { targetLocation: BOARD_COORDINATE }
 1 try_attack { targetId: int }
 1 try_leave EMPTY_PAYLOAD
@@ -24,10 +26,25 @@ that we test out the front-back communication
 
 ```js
 1 goto { where: MAP }
+* join CHARACTER
 1 map_info { characters: [CHARACTER] }
-1|* move { characterId: int, path: [BOARD_COORDINATE] }
+* match_ready EMPTY_PAYLOAD
+* start_match { turnOrder: [int] }
+* start_turn {
+  inTurnCharacterId: int,
+  inTurnMovementRange: [BOARD_COORDINATE],
+  inTurnAttackRange: [BOARD_COORDINATE],
+  reason: START_TURN_REASON,
+  mapUpdates: [MAP_UPDATE],
+}
+* move {
+  characterId: int,
+  path: [BOARD_COORDINATE],
+  availableAttackRange [BOARD_COORDINATE]
+}
 * attack { aggressorId: int, targetId: int, type: HIT_TYPE, damage: float }
 * leave { characterId: int }
+* end_match { winnerId: int }
 ```
 
 # Type definitions
@@ -43,6 +60,7 @@ CHARACTER := {
   name: string,
   color: int,
   id: int
+  turn: optional TURN_TOKEN
 }
 CHARACTER_PAWN := {
   location: BOARD_COORDINATE,
@@ -59,4 +77,13 @@ STATS := {
   criticalMultiplier: float,
 }
 HIT_TYPE := "regular" | "miss" | "critical"
+START_TURN_REASON := "start_match" | "timeout" | "pass"
+TURN_TOKEN := { move: bool, attack: bool, useSkill: bool, pass: bool }
+
+// TODO: Create update_map_info event and
+// TODO: Specify map updates
+MAP_UPDATE := { type: MAP_UPDATE_TYPE, ...}
+MAP_UPDATE_TYPE := ...
+
+// TODO: Where should initial items and skill go?
 ```
