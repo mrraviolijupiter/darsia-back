@@ -76,6 +76,9 @@ STATS := {
   evasionRate:  float[0, 1],
   criticalRate: float[0, 1],
   criticalMultiplier: float,
+  turnInitiative: float,
+  turnSpeed: float,
+  turnCharge: float
 }
 HIT_TYPE := "regular" | "miss" | "critical"
 START_TURN_REASON := "start_match" | "timeout" | "pass"
