@@ -55,23 +55,24 @@ MAP := "arena" | "menu"
 DIRECTION := "N" | "E" | "S" | "W"
 BOARD_COORDINATE := { x: int, y: int }
 CHARACTER := {
-  pawn: CHARACTER_PAWN,
-  baseStats: STATS,
-  name: string,
-  color: int,
   id: int
-  turn: optional TURN_TOKEN
+  name: string,
+  pawn: CHARACTER_PAWN,
+  color: int, // TODO: Will be replaced with initial outfits
+  baseStats: STATS
 }
 CHARACTER_PAWN := {
   location: BOARD_COORDINATE,
   front: DIRECTION,
-  currentStats: STATS
+  currentStats: STATS,
+  turn: optional TURN_TOKEN
 }
 STATS := {
   health: float,
   damage: float,
-  movementRadius: int,
-  range: [BOARD_COORDINATE],
+  movementSteps: int,
+  jumpHeight: int,
+  attackRange: [BOARD_COORDINATE],
   evasionRate:  float[0, 1],
   criticalRate: float[0, 1],
   criticalMultiplier: float,
