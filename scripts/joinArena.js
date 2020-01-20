@@ -13,11 +13,7 @@ module.exports = async function (character, socket){
   sails.sockets.broadcast(character.socket,'goto',{ where: 'arena' });
 
   // Notify other players in arena that a new player joined
-  sails.sockets.broadcast(arena.getRoomName(),'new_join',getCharacterToSend(character));
+  sails.sockets.broadcast(arena.getRoomName(),'join',getCharacterToSend(character));
 
-  // Create events to listen on this socket
-  socket.on('request_map_info', payload => {
-    let playersList = arena.charactersList;
-    sails.sockets.broadcast(character.socket,'map_info',{ characters: getCharacterToSend(playersList,true) });
-  });
+  return arena;
 };

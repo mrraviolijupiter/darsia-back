@@ -32,6 +32,15 @@ class arena{
   getRoomName(){
     return this.roomName;
   }
+  isReadyToStart(){
+    let character;
+    for (character of this.charactersList){
+      if(character.pawn.isReadyToStart === false){
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 module.exports = arena;

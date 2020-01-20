@@ -5,6 +5,7 @@ class characterPawn{
     this.location = global.defaultPawnStats.location;
     this.direction = global.defaultPawnStats.direction;
     this.currentStats = global.stats;
+    this.isReadyToStart = false;
   }
 }
 

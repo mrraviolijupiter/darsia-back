@@ -1,5 +1,8 @@
 let characterPawn = require('../classes/characterPawn.js');
-let joinArena = require('../scripts/joinArena.js');
+let joinArena = require('joinArena.js');
+let getCharacterToSend = require('getCharacterToSend.js');
+let activeArenas = require('../instances/activeArenas.js');
+let startMatch = require('matchStart.js');
 
 ////////////////////////////////////////////////////////////
 // This function does:
@@ -24,7 +27,7 @@ let matchCharacter = async function(userId, socket) {
     character = await Character.updateOne({
       id:user.character.id
     }).set({
-      characterPawn: new characterPawn()
+      pawn: new characterPawn()
     });
   }catch (e) {
     sails.log.error('Character not found. Exception: ' + e);
@@ -36,7 +39,27 @@ let matchCharacter = async function(userId, socket) {
 
   // Join character and socket to a non-full arena
   try {
-    let arenaID = await joinArena(character,socket);
+    let arena = await joinArena(character,socket);
+
+    if (arena.isFull()){
+      // Notify all players that match can start
+      sails.sockets.broadcast(arena.getRoomName(),'match_ready',{});
+      socket.on('match_ready_confirm',payload => {
+        let currentArena = activeArenas.currentArenas.find(aren => aren.getRoomName() === arena.getRoomName());
+        if (currentArena.charactersList.find(char => char.id === character.id).pawn.isReadyToStart !== true){
+          currentArena.charactersList.find(char => char.id === character.id).pawn.isReadyToStart = true;
+          if(currentArena.isReadyToStart()){
+            startMatch(currentArena);
+          }
+        }
+      });
+    }
+
+    // Create events to listen on this socket
+    socket.on('request_map_info', payload => {
+      let playersList = activeArenas.currentArenas.find(aren => aren.getRoomName() === arena.getRoomName()).charactersList;
+      sails.sockets.broadcast(character.socket,'map_info',{ characters: getCharacterToSend(playersList,true) });
+    });
   }catch (e) {
     sails.log.error('Fail joining arena. Exception: ' + e);
   }
