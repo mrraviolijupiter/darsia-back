@@ -9,23 +9,7 @@
  * https://sailsjs.com/config/sockets
  */
 
-class PhysicalCharacter{
-  constructor() {
-
-  }
-}
-
-let events = [
-  {
-    triggerName:'request_map_info',
-    callback: function (payload,session,socket) {
-      //return here map info
-      sails.log.debug(session);
-      socket.emit('map_info', { players: 'por ahora nada xd' });
-      sails.log.debug(payload );//+ arenaID);
-    }
-  }
-];
+let newConnection = require('../scripts/newConnection.js');
 
 module.exports.sockets = {
 
@@ -49,7 +33,7 @@ module.exports.sockets = {
 
   onConnect: async function(session, socket) {
     // Notify new connection
-    await sails.helpers.notifications.newConnection(socket);
+    await newConnection(socket);
   },
   /***************************************************************************
   *                                                                          *
@@ -68,7 +52,6 @@ module.exports.sockets = {
     // `true` allows the socket to connect.
     // (`false` would reject the connection)
 
-    sails.log.info('New incoming socket connection');
     return proceed(undefined, true);
   },
 

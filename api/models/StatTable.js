@@ -4,9 +4,7 @@
  * StatTable has all possible stats for items and character
  *
  */
-
 module.exports = {
-
   attributes: {
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
@@ -15,37 +13,37 @@ module.exports = {
 
     health: {
       type: 'number',
-      defaultsTo: sails.config.custom.stats.health,
+      defaultsTo: 0,
     },
 
     damage: {
       type: 'number',
-      defaultsTo: sails.config.custom.stats.damage,
+      defaultsTo: 0,
     },
 
     movement: {
       type: 'number',
-      defaultsTo: sails.config.custom.stats.movement,
+      defaultsTo: 0,
     },
 
     range: {
       type: 'json',
-      defaultsTo: sails.config.custom.stats.range,
+      defaultsTo: 0,
     },
 
     evasionRate: {
       type: 'number',
-      defaultsTo: sails.config.custom.stats.evasionRate,
+      defaultsTo: 0,
     },
 
     criticalRate: {
       type: 'number',
-      defaultsTo: sails.config.custom.stats.criticalRate,
+      defaultsTo: 0,
     },
 
     criticalMultiplier: {
       type: 'number',
-      defaultsTo: sails.config.custom.stats.criticalMultiplier,
+      defaultsTo: 0,
     },
 
     //etc,etc

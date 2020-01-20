@@ -1,3 +1,5 @@
+let fillStatTable = require('../../../scripts/fillStatTable.js');
+
 module.exports = {
   inputs: {
 
@@ -34,6 +36,8 @@ module.exports = {
     }
 
     let statTable = await StatTable.create().fetch();
+
+    await fillStatTable(statTable);
 
     /// Create new character
     let newCharacter = await Character.create({

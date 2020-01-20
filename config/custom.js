@@ -91,36 +91,4 @@ module.exports.custom = {
   * Any other custom config this Sails app should use during development.    *
   *                                                                          *
   ***************************************************************************/
-  stats:{
-    health: 100.6,
-    damage: 4.6,
-    movement: 4,
-    range: null,
-    evasionRate:  0.1,
-    criticalRate: 0.2,
-    criticalMultiplier: 1.5,
-  },
-
-  arena:{
-    size: 3,
-  },
-
-  activeArenas:{
-    currentArenas: [null],
-  },
-
-  DIRECTION: {
-    N: 'north',
-    S: 'south',
-    E: 'east',
-    W: 'west',
-  },
-
-  defaultPawnStats:{
-    location:{
-      x: 1,
-      y: 1,
-    },
-    direction: 'north',
-  },
 };
