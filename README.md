@@ -13,40 +13,81 @@ that we test out the front-back communication
 
 # Client emitted messages
 
-| Event | Payload |
-| - | - |
-| `request_map_info` 1 | `{ id: int } //id de la arena` |
-| `try_move` 1 | `{ targetLocation: BOARD_COORDINATE }` |
-| `try_attack` 1 | `{ targetId: int }` |
-| `try_leave` 1 | `EMPTY_PAYLOAD ` |
+```js
+1 request_map_info EMPTY_PAYLOAD
+1 match_ready_confirm EMPTY_PAYLOAD
+1 try_pass EMPTY_PAYLOAD
+1 try_move { targetLocation: BOARD_COORDINATE }
+1 try_attack { targetId: int }
+1 try_leave EMPTY_PAYLOAD
+```
 
 # Server emitted messages
 
-| Event | Payload |
-| - | - |
-| `goto` 1 | `{ where: MAP, id: int } //Id de la arena` |`
-| `map_info` 1 | `{ characters: [CHARACTER] }` |`
-| `move` 1 / * | `{ characterId: int, path: [BOARD_COORDINATE] }` |`
-| `attack` * | `{ aggressorId: int, targetId: int, type: HIT_TYPE, damage: float }` |`
-| `leave` * | `{ characterId: int }` |`
+```js
+1 goto { where: MAP }
+* join CHARACTER
+1 map_info { characters: [CHARACTER] }
+* match_ready EMPTY_PAYLOAD
+* start_match { turnOrder: [int] }
+* start_turn {
+  inTurnCharacterId: int,
+  inTurnMovementRange: [BOARD_COORDINATE],
+  inTurnAttackRange: [BOARD_COORDINATE],
+  reason: START_TURN_REASON,
+  mapUpdates: [MAP_UPDATE],
+}
+* move {
+  characterId: int,
+  path: [BOARD_COORDINATE],
+  availableAttackRange [BOARD_COORDINATE]
+}
+* attack { aggressorId: int, targetId: int, type: HIT_TYPE, damage: float }
+* leave { characterId: int }
+* end_match { winnerId: int }
+```
 
 # Type definitions
-- `MAP := "arena" | "menu"`
-- `EMPTY_PAYLOAD := "" or null or {}` *(be consistent)*
-- `DIRECTION := "N" | "E" | "S" | "W"`
-- `BOARD_COORDINATE := { x: int, y: int }`
-- `CHARACTER := { characterPawn: CHARACTER_PAWN, baseStats: STATS, name: string , color: int, id: int }`
-- `CHARACTER_PAWN :=
-  { location: BOARD_COORDINATE, front: DIRECTION, currentStats: STATS }`
-- ```js
-  STATS := {
-    health: float,
-    damage: float,
-    movementRadius: int,
-    range: [BOARD_COORDINATE],
-    evasionRate:  float[0, 1],
-    criticalRate: float[0, 1],
-    criticalMultiplier: float,
-  }
-  ```
-- `HIT_TYPE := "hit" | "miss" | "critical"`
+
+```js
+EMPTY_PAYLOAD := "" or null or {} // be consistent
+MAP := "arena" | "menu"
+DIRECTION := "N" | "E" | "S" | "W"
+BOARD_COORDINATE := { x: int, y: int }
+CHARACTER := {
+  id: int
+  name: string,
+  pawn: CHARACTER_PAWN,
+  color: int, // TODO: Will be replaced with initial outfits
+  baseStats: STATS
+}
+CHARACTER_PAWN := {
+  location: BOARD_COORDINATE,
+  front: DIRECTION,
+  currentStats: STATS,
+  turn: optional TURN_TOKEN
+}
+STATS := {
+  health: float,
+  damage: float,
+  movementSteps: int,
+  jumpHeight: int,
+  attackRange: [BOARD_COORDINATE],
+  evasionRate:  float[0, 1],
+  criticalRate: float[0, 1],
+  criticalMultiplier: float,
+  turnInitiative: float,
+  turnSpeed: float,
+  turnCharge: float
+}
+HIT_TYPE := "regular" | "miss" | "critical"
+START_TURN_REASON := "start_match" | "timeout" | "pass"
+TURN_TOKEN := { move: bool, attack: bool, useSkill: bool, pass: bool }
+
+// TODO: Create update_map_info event and
+// TODO: Specify map updates
+MAP_UPDATE := { type: MAP_UPDATE_TYPE, ...}
+MAP_UPDATE_TYPE := ...
+
+// TODO: Where should initial items and skill go?
+```
