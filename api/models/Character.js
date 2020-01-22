@@ -19,14 +19,21 @@ module.exports = {
       maxLength: 200,
       example: '_xXRobertitoXx_'
     },
+
     user: {
       model: 'User',
     },
 
-    stats: {
+    baseStats: {
       model: 'StatTable',
     },
-    characterPawn:{
+
+    color:{
+      type: 'number',
+      defaultsTo: 0,
+    },
+
+    pawn:{
       type: 'json',
     },
 

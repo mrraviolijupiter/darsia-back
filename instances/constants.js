@@ -4,10 +4,15 @@ module.exports = {
     health: 100.6,
     damage: 4.6,
     movement: 4,
-    range: null,
+    jumpHeight: 1,
+    movementSteps: 1,
+    attackRange: null,
     evasionRate:  0.1,
     criticalRate: 0.2,
     criticalMultiplier: 1.5,
+    turnInitiative: 1,
+    turnSpeed: 1,
+    turnCharge: 5,
   },
 
   arena:{

@@ -41,6 +41,9 @@ class arena{
     }
     return true;
   }
+  start(){
+    return;
+  }
 }
 
 module.exports = arena;

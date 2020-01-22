@@ -26,7 +26,17 @@ module.exports = {
       defaultsTo: 0,
     },
 
-    range: {
+    jumpHeight:{
+      type: 'number',
+      defaultsTo: 0,
+    },
+
+    movementSteps:{
+      type: 'number',
+      defaultsTo: 0,
+    },
+
+    attackRange: {
       type: 'json',
       defaultsTo: 0,
     },
@@ -42,6 +52,21 @@ module.exports = {
     },
 
     criticalMultiplier: {
+      type: 'number',
+      defaultsTo: 0,
+    },
+
+    turnInitiative:{
+      type: 'number',
+      defaultsTo: 0,
+    },
+
+    turnSpeed:{
+      type: 'number',
+      defaultsTo: 0,
+    },
+
+    turnCharge:{
       type: 'number',
       defaultsTo: 0,
     },

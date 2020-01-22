@@ -1,8 +1,7 @@
 let characterPawn = require('../classes/characterPawn.js');
-let joinArena = require('joinArena.js');
-let getCharacterToSend = require('getCharacterToSend.js');
+let joinArena = require('./joinArena.js');
+let getCharacterToSend = require('./getCharacterToSend.js');
 let activeArenas = require('../instances/activeArenas.js');
-let startMatch = require('matchStart.js');
 
 ////////////////////////////////////////////////////////////
 // This function does:
@@ -49,7 +48,7 @@ let matchCharacter = async function(userId, socket) {
         if (currentArena.charactersList.find(char => char.id === character.id).pawn.isReadyToStart !== true){
           currentArena.charactersList.find(char => char.id === character.id).pawn.isReadyToStart = true;
           if(currentArena.isReadyToStart()){
-            startMatch(currentArena);
+            currentArena.start();
           }
         }
       });
