@@ -1,5 +1,6 @@
 let getCharacterToSend = require('../scripts/getCharacterToSend.js');
 let activeArenas = require('../instances/activeArenas.js');
+let protocol = require('../instances/protocol.js');
 
 module.exports = async function (character, socket){
   // Join character to correspondent arena
@@ -10,10 +11,12 @@ module.exports = async function (character, socket){
   sails.log.debug('New user joined arena');
 
   // Move player to the arena environment
-  sails.sockets.broadcast(character.socket,'goto',{ where: 'arena' });
+  let payload = protocol.serverMessages.goto.payload;
+  payload.where = 'arena';
+  sails.sockets.broadcast(character.socket, protocol.serverMessages.goto.message, payload);
 
   // Notify other players in arena that a new player joined
-  sails.sockets.broadcast(arena.getRoomName(),'join',getCharacterToSend(character));
+  sails.sockets.broadcast(arena.getRoomName(),protocol.serverMessages.join.message,getCharacterToSend(character));
 
   return arena;
 };

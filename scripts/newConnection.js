@@ -1,7 +1,7 @@
 let characterPawn = require('../classes/characterPawn.js');
 let joinArena = require('./joinArena.js');
-let getCharacterToSend = require('./getCharacterToSend.js');
 let activeArenas = require('../instances/activeArenas.js');
+let protocol = require('../instances/protocol.js');
 
 ////////////////////////////////////////////////////////////
 // This function does:
@@ -42,23 +42,12 @@ let matchCharacter = async function(userId, socket) {
 
     if (arena.isFull()){
       // Notify all players that match can start
-      sails.sockets.broadcast(arena.getRoomName(),'match_ready',{});
-      socket.on('match_ready_confirm',payload => {
-        let currentArena = activeArenas.currentArenas.find(aren => aren.getRoomName() === arena.getRoomName());
-        if (currentArena.charactersList.find(char => char.id === character.id).pawn.isReadyToStart !== true){
-          currentArena.charactersList.find(char => char.id === character.id).pawn.isReadyToStart = true;
-          if(currentArena.isReadyToStart()){
-            currentArena.start();
-          }
-        }
-      });
+      sails.sockets.broadcast(arena.getRoomName(),protocol.serverMessages.matchReady.message,protocol.serverMessages.matchReady.payload);
     }
 
     // Create events to listen on this socket
-    socket.on('request_map_info', payload => {
-      let playersList = activeArenas.currentArenas.find(aren => aren.getRoomName() === arena.getRoomName()).charactersList;
-      sails.sockets.broadcast(character.socket,'map_info',{ characters: getCharacterToSend(playersList,true) });
-    });
+    socket.on(protocol.clientMessages.matchReadyConfirm.eventName,payload => { protocol.clientMessages.matchReadyConfirm.callback(payload, character, arena);});
+    socket.on(protocol.clientMessages.requestMapInfo.eventName, payload => { protocol.clientMessages.requestMapInfo.callback(payload, character, arena);});
   }catch (e) {
     sails.log.error('Fail joining arena. Exception: ' + e);
   }
@@ -93,4 +82,5 @@ module.exports = async function (socket) {
       sails.log.error('Error in matchCharacter. Exception: ' + e);
     }
   });
+
 };
