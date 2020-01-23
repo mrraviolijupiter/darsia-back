@@ -8,6 +8,7 @@ class arena{
       this.charactersList = [];
     }
     this.roomName = '';
+    this.state = 'unfilled';
   }
   joinCharacter(character){
     if (character){

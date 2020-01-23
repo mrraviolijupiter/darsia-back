@@ -43,7 +43,7 @@ module.exports = {
     let newCharacter = await Character.create({
       name: inputs.name,
       user: thisUser.id,
-      stats: statTable.id,
+      baseStats: statTable.id,
     }).intercept({name: 'UsageError'},'invalid')
       .intercept('E_MISSING_OR_INVALID_PARAMS','invalid')
       .fetch();

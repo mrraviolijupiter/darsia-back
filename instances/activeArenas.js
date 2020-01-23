@@ -7,7 +7,6 @@ module.exports = {
       this.currentArenas.pop();
       this.currentArenas.push(new arena(character));
       this.currentArenas[this.currentArenas.length-1].setRoomNameId(0);
-      this.currentArenas[this.currentArenas.length-1].joinCharacter(character);
     }else{
       this.currentArenas[this.currentArenas.length-1].joinCharacter(character);
     }
