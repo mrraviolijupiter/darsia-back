@@ -16,7 +16,7 @@ module.exports = {
   },
 
   arena:{
-    size: 3,
+    size: 2,
   },
 
   defaultPawnStats:{
