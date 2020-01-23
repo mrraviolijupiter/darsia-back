@@ -43,7 +43,29 @@ class arena{
     return true;
   }
   start(){
-    return;
+    // Order characterList by initiative.
+    let flag = true;
+    while(flag){
+      flag = false;
+      for(let i = 1; i < this.charactersList.length; i++){
+        if (this.charactersList[i].pawn.currentStats.turnInitiative < this.charactersList[i-1].pawn.currentStats.turnInitiative){
+          let tmp = this.charactersList[i];
+          this.charactersList[i] = this.charactersList[i-1];
+          this.charactersList[i-1] = tmp;
+          flag = true;
+        }
+      }
+    }
+    let characterIdList = [];
+    for (let character in this.charactersList){
+      characterIdList.push(this.charactersList[character].id);
+    }
+
+    let protocol = require('../instances/protocol.js');
+    let payload = protocol.serverMessages.matchReady.payload;
+    payload.turnOrder = characterIdList;
+    sails.sockets.broadcast(this.getRoomName(),protocol.serverMessages.startMatch.message,payload);
+    this.state = 'matchStarted';
   }
 }
 
