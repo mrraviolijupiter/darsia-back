@@ -29,7 +29,7 @@ module.exports.sockets = {
   *                                                                          *
   ***************************************************************************/
 
-  // transports: [ 'websocket' ]
+  transports: [ 'polling','websocket' ],
 
   onConnect: async function(session, socket) {
     // Notify new connection

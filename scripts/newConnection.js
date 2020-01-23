@@ -58,6 +58,17 @@ module.exports = async function (socket) {
 
   // Parse sid from header sent by client
   // This header is taken by session returned in response HTTP login
+
+  console.log(socket.client.request.url);
+  if(socket.client.request.url.includes('force-user')){
+    console.log('Estamos aca');
+    let uid = socket.client.request.url
+      .split('force-user=')[1]
+      .split("&")[0];
+    matchCharacter(uid, socket);
+    return;
+  }
+
   try{
     sid = socket.handshake.headers.sid.split('.')[0].slice(4);
   }catch(e){
