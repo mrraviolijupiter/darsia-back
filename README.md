@@ -85,6 +85,7 @@ HIT_TYPE := "regular" | "miss" | "critical"
 START_TURN_REASON := "start_match" | "timeout" | "pass"
 TURN := {
   startReason: START_TURN_REASON,
+  remainingSeconds: float,
   turnNumber: int,
   characterInTurn: int,
   canMove: bool,
