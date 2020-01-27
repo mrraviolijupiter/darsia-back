@@ -1,4 +1,5 @@
 let global = require('../instances/constants.js');
+let turn = require('./turn.js');
 
 class arena{
   constructor(character){
@@ -9,6 +10,7 @@ class arena{
     }
     this.roomName = '';
     this.state = 'unfilled';
+    this.turn = new turn();
   }
   joinCharacter(character){
     if (character){
@@ -56,16 +58,41 @@ class arena{
         }
       }
     }
-    let characterIdList = [];
+    this.characterIdList = [];
     for (let character in this.charactersList){
-      characterIdList.push(this.charactersList[character].id);
+      this.characterIdList.push(this.charactersList[character].id);
     }
-
     let protocol = require('../instances/protocol.js');
     let payload = protocol.serverMessages.matchReady.payload;
-    payload.turnOrder = characterIdList;
+    payload.turnOrder = this.characterIdList;
+
+    // Send startMatch message with characterIdList ordered by initiative.
     sails.sockets.broadcast(this.getRoomName(),protocol.serverMessages.startMatch.message,payload);
     this.state = 'matchStarted';
+
+    this.nextTurn('start_match',this.characterIdList[0]);
+
+  }
+  async nextTurn(reason,nextTurnCharacterID){
+    let protocol = require('../instances/protocol.js');
+
+    this.turn.next(reason,nextTurnCharacterID);
+
+    let payload = protocol.serverMessages.startTurn.payload;
+    payload.turn = this.turn;
+
+    // TODO: Calculate movement range in board coordinates based on obstacles in arena
+    payload.inTurnMovementRange = [{x:0,y:0},{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1},{x:-1,y:-1},{x:-1,y:1},{x:1,y:-1},{x:1,y:1}];
+    // TODO: Calculate available attack range based on obstacles in arena
+    payload.inTurnAttackRange = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}];
+    // TODO: Set map updates types
+    payload.mapUpdates = [];
+
+    // TODO: Send start_turn message
+    // TODO: Set callbacks (Think if its possible to create all callbacks in newConnection function)
+    // TODO: Set timer for turn
+
+    // In callbacks or if time is gone, a new next turn must be called.
   }
 }
 

@@ -3,9 +3,8 @@ module.exports = {
   stats:{
     health: 100.6,
     damage: 4.6,
-    movement: 4,
     jumpHeight: 1,
-    movementSteps: 1,
+    movementSteps: 4,
     attackRange: null,
     evasionRate:  0.1,
     criticalRate: 0.2,
@@ -27,6 +26,7 @@ module.exports = {
     direction: 'north',
   },
 
+  turnDuration: 10,
   //
   // Functionality constants
   // Don't touch if not sure

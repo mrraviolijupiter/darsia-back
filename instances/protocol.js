@@ -1,9 +1,9 @@
-let cb_requestMapInfo = require('../scripts/eventsCB/requestMapInfo.js');
-let cb_matchReadyConfirm = require('../scripts/eventsCB/matchReadyConfirm.js');
-let cb_tryPass = require('../scripts/eventsCB/tryPass.js');
-let cb_tryMove = require('../scripts/eventsCB/tryMove.js');
-let cb_tryAttack = require('../scripts/eventsCB/tryAttack.js');
-let cb_tryLeave = require('../scripts/eventsCB/tryLeave.js');
+let requestMapInfoCallback = require('../scripts/eventsCB/requestMapInfo.js');
+let matchReadyConfirmCallback = require('../scripts/eventsCB/matchReadyConfirm.js');
+let tryPassCallback = require('../scripts/eventsCB/tryPass.js');
+let tryMoveCallback = require('../scripts/eventsCB/tryMove.js');
+let tryAttackCallback = require('../scripts/eventsCB/tryAttack.js');
+let tryLeaveCallback = require('../scripts/eventsCB/tryLeave.js');
 
 module.exports = {
   serverMessages:{
@@ -26,6 +26,7 @@ module.exports = {
     mapInfo:{
       message:'map_info',
       payload:{
+        turn: {},
         characters:[],
       }
     },
@@ -39,31 +40,40 @@ module.exports = {
         turnOrder: [],
       }
     },
+    startTurn: {
+      message: 'start_turn',
+      payload:{
+        turn: {},
+        inTurnMovementRange: [],
+        inTurnAttackRange: [],
+        mapUpdates: [],
+      }
+    },
   },
   clientMessages:{
     requestMapInfo: {
       eventName: 'request_map_info',
-      callback: cb_requestMapInfo,
+      callback: requestMapInfoCallback,
     },
     matchReadyConfirm: {
       eventName: 'match_ready_confirm',
-      callback: cb_matchReadyConfirm,
+      callback: matchReadyConfirmCallback,
     },
     tryPass: {
       eventName: 'try_pass',
-      callback: cb_tryPass,
+      callback: tryPassCallback,
     },
     tryMove: {
       eventName: 'try_move',
-      callback: cb_tryMove,
+      callback: tryMoveCallback,
     },
     tryAttack: {
       eventName: 'try_attack',
-      callback: cb_tryAttack,
+      callback: tryAttackCallback,
     },
     tryLeave: {
       eventName: 'try_leave',
-      callback: cb_tryLeave,
+      callback: tryLeaveCallback,
     },
   },
 };
