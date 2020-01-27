@@ -88,7 +88,9 @@ class arena{
     // TODO: Set map updates types
     payload.mapUpdates = [];
 
-    // TODO: Send start_turn message
+
+    sails.sockets.broadcast(this.getRoomName(),protocol.serverMessages.startTurn.message,payload);
+
     // TODO: Set callbacks (Think if its possible to create all callbacks in newConnection function)
     // TODO: Set timer for turn
 
