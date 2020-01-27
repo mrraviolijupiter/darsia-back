@@ -27,14 +27,16 @@ that we test out the front-back communication
 ```js
 1 goto { where: MAP }
 * join CHARACTER
-1 map_info { characters: [CHARACTER] }
+1 map_info {
+  turn: TURN,
+  characters: [CHARACTER]
+}
 * match_ready EMPTY_PAYLOAD
 * start_match { turnOrder: [int] }
 * start_turn {
-  inTurnCharacterId: int,
+  turn: TURN,
   inTurnMovementRange: [BOARD_COORDINATE],
   inTurnAttackRange: [BOARD_COORDINATE],
-  reason: START_TURN_REASON,
   mapUpdates: [MAP_UPDATE],
 }
 * move {
@@ -55,7 +57,7 @@ MAP := "arena" | "menu"
 DIRECTION := "N" | "E" | "S" | "W"
 BOARD_COORDINATE := { x: int, y: int }
 CHARACTER := {
-  id: int
+  id: int,
   name: string,
   pawn: CHARACTER_PAWN,
   color: int, // TODO: Will be replaced with initial outfits
@@ -64,8 +66,7 @@ CHARACTER := {
 CHARACTER_PAWN := {
   location: BOARD_COORDINATE,
   front: DIRECTION,
-  currentStats: STATS,
-  turn: optional TURN_TOKEN
+  currentStats: STATS
 }
 STATS := {
   health: float,
@@ -82,7 +83,16 @@ STATS := {
 }
 HIT_TYPE := "regular" | "miss" | "critical"
 START_TURN_REASON := "start_match" | "timeout" | "pass"
-TURN_TOKEN := { move: bool, attack: bool, useSkill: bool, pass: bool }
+TURN := {
+  startReason: START_TURN_REASON,
+  remainingSeconds: float,
+  turnNumber: int,
+  characterInTurn: int,
+  canMove: bool,
+  canAttack: bool,
+  canUseSkill: bool,
+  canPass: bool
+}
 
 // TODO: Create update_map_info event and
 // TODO: Specify map updates
