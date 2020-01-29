@@ -11,10 +11,10 @@ class characterPawn{
         case '1':
           // Tank
           this.currentStats.health = global.stats.health + 0.3*global.stats.health;
-          this.currentStats.movementSteps = global.stats.movementSteps - 0.3*global.stats.movementSteps;
           this.currentStats.criticalMultiplier = global.stats.criticalMultiplier - 0.3*global.stats.criticalMultiplier;
           this.currentStats.turnInitiative = global.stats.turnInitiative - 0.3*global.stats.turnInitiative;
           this.currentStats.turnSpeed = global.stats.turnSpeed + 0.2*global.stats.turnSpeed;
+          this.location = {x: 4,y: 4};
           this.currentStats.attackRange = [
             {x:0,y:1},
             {x:0,y:-1},
@@ -25,13 +25,13 @@ class characterPawn{
         case '2':
           // Assassin
           this.currentStats.health = global.stats.health - 0.2*global.stats.health;
-          this.currentStats.movementSteps = global.stats.movementSteps + 0.4*global.stats.movementSteps;
           this.currentStats.criticalMultiplier = global.stats.criticalMultiplier + 0.3*global.stats.criticalMultiplier;
           this.currentStats.turnInitiative = global.stats.turnInitiative + 0.3*global.stats.turnInitiative;
           this.currentStats.turnSpeed = global.stats.turnSpeed + 0.2*global.stats.turnSpeed;
           this.currentStats.damage = global.stats.damage + 0.2*global.stats.damage;
           this.currentStats.turnCharge = global.stats.turnCharge - 0.2*global.stats.turnCharge;
           this.currentStats.criticalRate = global.stats.criticalRate + 0.2*global.stats.criticalRate;
+          this.location = {x: 5,y: 1};
           this.currentStats.attackRange = [
             {x:0,y:1},
             {x:0,y:-1},

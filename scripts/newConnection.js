@@ -42,7 +42,7 @@ let matchCharacter = async function(userId, socket, setup) {
     return;
   }
 
-  // Character instance contain its socket id. Useful later probably
+  // Character instance contain its socket. Useful later probably
   character.socket = socket.id;
 
   // Join character and socket to a non-full arena

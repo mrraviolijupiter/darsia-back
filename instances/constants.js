@@ -4,7 +4,7 @@ module.exports = {
     health: 100.6,
     damage: 4.6,
     jumpHeight: 1,
-    movementSteps: 4,
+    movementSteps: 2,
     attackRange: null,
     evasionRate:  0.1,
     criticalRate: 0.2,
@@ -26,7 +26,20 @@ module.exports = {
     direction: 'north',
   },
 
-  turnDuration: 10,
+  turnDuration: 5000,
+
+  arenaMap:[
+    [1,9,1,1,1,1,1,1,1,1],
+    [1,1,2,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,3,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,4,1,1],
+    [2,2,2,1,1,1,1,1,1,1],
+    [2,2,2,1,1,1,1,1,1,1],
+    [2,2,2,1,1,1,1,1,1,1],
+    [7,5,2,1,1,1,1,1,1,1],
+  ],
   //
   // Functionality constants
   // Don't touch if not sure

@@ -10,6 +10,7 @@ class turn{
     this.canAttack = false;
     this.canUseSkill = false;
     this.canPass = false;
+    this.timer = 0;
   }
   next(reason, nextTurnCharacterID){
     this.turnNumber++;

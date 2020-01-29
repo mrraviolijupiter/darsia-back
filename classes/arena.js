@@ -11,6 +11,7 @@ class arena{
     this.roomName = '';
     this.state = 'unfilled';
     this.turn = new turn();
+    this.mapUpdates = [];
   }
   joinCharacter(character){
     if (character){
@@ -75,26 +76,59 @@ class arena{
   }
   async nextTurn(reason,nextTurnCharacterID){
     let protocol = require('../instances/protocol.js');
+    let global = require('../instances/constants.js');
 
-    this.turn.next(reason,nextTurnCharacterID);
+    // Restart turns roulette
+    if (nextTurnCharacterID >= this.charactersList.length){
+      nextTurnCharacterID = 0;
+    }
+
+    let turnCharacter = this.charactersList[nextTurnCharacterID];
+
+    // TODO: Increase charge turn bar
+
+    await this.turn.next(reason,nextTurnCharacterID);
+
 
     let payload = protocol.serverMessages.startTurn.payload;
     payload.turn = this.turn;
 
-    // TODO: Calculate movement range in board coordinates based on obstacles in arena
-    payload.inTurnMovementRange = [{x:0,y:0},{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1},{x:-1,y:-1},{x:-1,y:1},{x:1,y:-1},{x:1,y:1}];
-    // TODO: Calculate available attack range based on obstacles in arena
-    payload.inTurnAttackRange = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}];
-    // TODO: Set map updates types
-    payload.mapUpdates = [];
+    let getMovementRange = require('../scripts/getMovementRange.js');
 
+    let obstacles = [];
+    // Obstacles must contain all obstacles in map and other pawn positions.
+    this.charactersList.forEach(character => obstacles.push(character.pawn.location));
+    // TODO: Add other obstacles
+    payload.inTurnMovementRange = getMovementRange(turnCharacter.pawn,global.arenaMap,obstacles);
+
+    payload.inTurnAttackRange = turnCharacter.pawn.currentStats.attackRange;
+    // TODO: Set map updates types
+    // Map updates probably are gonna be set when a skill is used or when a chest is opened. So, updates must be loaded in respective callback function.
+    payload.mapUpdates = this.mapUpdates;
 
     sails.sockets.broadcast(this.getRoomName(),protocol.serverMessages.startTurn.message,payload);
 
-    // TODO: Set callbacks (Think if its possible to create all callbacks in newConnection function)
-    // TODO: Set timer for turn
+    for (let i in this.charactersList){
+      let socket = sails.sockets.get(this.charactersList[i].socket);
 
-    // In callbacks or if time is gone, a new next turn must be called.
+      if (reason !== 'start_match'){
+        socket.off(protocol.clientMessages.tryMove.eventName,this.charactersList[i].tryMove);
+        socket.off(protocol.clientMessages.tryAttack.eventName,this.charactersList[i].tryAttack);
+        socket.off(protocol.clientMessages.tryLeave.eventName,this.charactersList[i].tryLeave);
+        socket.off(protocol.clientMessages.tryPass.eventName,this.charactersList[i].tryPass);
+      }
+
+      this.charactersList[i].tryLeave = mPayload => { protocol.clientMessages.tryLeave.callback(mPayload, payload, this, this.charactersList[i]);};
+      this.charactersList[i].tryMove = mPayload => { protocol.clientMessages.tryMove.callback(mPayload, payload, this, this.charactersList[i]);};
+      this.charactersList[i].tryAttack = mPayload => { protocol.clientMessages.tryAttack.callback(mPayload, payload, this, this.charactersList[i]);};
+      this.charactersList[i].tryPass = mPayload => { protocol.clientMessages.tryPass.callback(mPayload, payload, this, this.charactersList[i]);};
+
+      socket.on(protocol.clientMessages.tryMove.eventName, this.charactersList[i].tryMove);
+      socket.on(protocol.clientMessages.tryAttack.eventName, this.charactersList[i].tryAttack);
+      socket.on(protocol.clientMessages.tryPass.eventName, this.charactersList[i].tryPass);
+      socket.on(protocol.clientMessages.tryLeave.eventName, this.charactersList[i].tryLeave);
+    }
+    this.turn.timer = setTimeout(()=>{this.nextTurn('timeout',nextTurnCharacterID+1);},global.turnDuration);
   }
 }
 
