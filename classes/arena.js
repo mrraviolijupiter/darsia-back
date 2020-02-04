@@ -97,7 +97,12 @@ class arena{
 
     let obstacles = [];
     // Obstacles must contain all obstacles in map and other pawn positions.
-    this.charactersList.forEach(character => obstacles.push(character.pawn.location));
+    this.charactersList.forEach(character => {
+      if(turnCharacter.id !== character.id) {
+        obstacles.push(character.pawn.location);
+      }
+    });
+
     // TODO: Add other obstacles
     payload.inTurnMovementRange = getMovementRange(turnCharacter.pawn,global.arenaMap,obstacles);
 
