@@ -49,6 +49,14 @@ module.exports = {
         mapUpdates: [],
       }
     },
+    move:{
+      message: 'move',
+      payload:{
+        characterId: 0,
+        path: [],
+        availableAttackRange: [],
+      }
+    },
   },
   clientMessages:{
     requestMapInfo: {
