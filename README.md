@@ -26,7 +26,7 @@ that we test out the front-back communication
 
 ```js
 1 goto { where: MAP }
-* join CHARACTER
+* join { character: CHARACTER }
 1 map_info {
   turn: TURN,
   characters: [CHARACTER]
