@@ -12,6 +12,8 @@ module.exports = function (payload, startTurnPayload, arena, character) {
       payload.path = getPath(targetLocation,character.pawn.location,startTurnPayload.inTurnMovementRange);
       payload.availableAttackRange = startTurnPayload.inTurnAttackRange;
       sails.sockets.broadcast(arena.getRoomName(),protocol.serverMessages.move.message,payload);
+
+      character.pawn.location = targetLocation;
     }else{
       sails.log.debug('You are trying to move outside your range');
     }
