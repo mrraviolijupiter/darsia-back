@@ -1,7 +1,6 @@
 module.exports = function (payload, startTurnPayload, arena, character) {
   if(character.id === arena.charactersList[arena.turn.characterInTurn].id){
     const targetLocation = JSON.parse(payload).targetLocation;
-    sails.log.debug('location: '+ targetLocation + ' payload: '+JSON.parse(payload));
     if (startTurnPayload.inTurnMovementRange.find(location => location.x===targetLocation.x && location.y===targetLocation.y)){
       let protocol = require('../../instances/protocol.js');
       let getPath = require('../getPath.js');

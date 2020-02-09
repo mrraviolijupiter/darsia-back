@@ -57,6 +57,12 @@ module.exports = {
         availableAttackRange: [],
       }
     },
+    leave:{
+      message: 'leave',
+      payload:{
+        characterId: 0,
+      }
+    },
   },
   clientMessages:{
     requestMapInfo: {
