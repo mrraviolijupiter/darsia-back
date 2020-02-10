@@ -14,7 +14,7 @@ that we test out the front-back communication
 # Client emitted messages
 
 ```js
-1 request_map_info EMPTY_PAYLOAD
+1 request_match_info EMPTY_PAYLOAD
 1 match_ready_confirm EMPTY_PAYLOAD
 1 try_pass EMPTY_PAYLOAD
 1 try_move { targetLocation: BOARD_COORDINATE }
@@ -27,7 +27,7 @@ that we test out the front-back communication
 ```js
 1 goto { where: MAP }
 * join { character: CHARACTER }
-1 map_info {
+1 match_info {
   turn: TURN,
   characters: [CHARACTER]
 }
@@ -37,7 +37,7 @@ that we test out the front-back communication
   turn: TURN,
   inTurnMovementRange: [BOARD_COORDINATE],
   inTurnAttackRange: [BOARD_COORDINATE],
-  mapUpdates: [MAP_UPDATE],
+  matchUpdates: [MATCH_UPDATE],
 }
 * move {
   characterId: int,
@@ -94,10 +94,10 @@ TURN := {
   canPass: bool
 }
 
-// TODO: Create update_map_info event and
-// TODO: Specify map updates
-MAP_UPDATE := { type: MAP_UPDATE_TYPE, ...}
-MAP_UPDATE_TYPE := ...
+// TODO: Create update_match_info event and
+// TODO: Specify match updates
+MATCH_UPDATE := { type: MATCH_UPDATE_TYPE, ...}
+MATCH_UPDATE_TYPE := ...
 
 // TODO: Where should initial items and skill go?
 ```
