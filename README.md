@@ -20,6 +20,8 @@ that we test out the front-back communication
 1 try_move { targetLocation: BOARD_COORDINATE }
 1 try_attack { targetId: int }
 1 try_leave EMPTY_PAYLOAD
+1 try_open_chest { chestLocation: BOARD_COORDINATE }
+1 try_use_skill { skillName: string }
 ```
 
 # Server emitted messages
@@ -29,6 +31,8 @@ that we test out the front-back communication
 * join { character: CHARACTER }
 1 match_info {
   turn: TURN,
+  turnOrder: [int],
+  chests: [CHEST],
   characters: [CHARACTER]
 }
 * match_ready EMPTY_PAYLOAD
@@ -45,6 +49,9 @@ that we test out the front-back communication
   availableAttackRange [BOARD_COORDINATE]
 }
 * attack { aggressorId: int, targetId: int, type: HIT_TYPE, damage: float }
+* open_chest { receiverId: int, chest: CHEST }
+1 private_open_chest { receiverId: int, chest: CHEST, skillName: string }
+* use_skill { casterId: int, skillName: string, skill: SKILL }
 * leave { characterId: int }
 * end_match { winnerId: int }
 ```
@@ -61,12 +68,16 @@ CHARACTER := {
   name: string,
   pawn: CHARACTER_PAWN,
   color: int, // TODO: Will be replaced with initial outfits
-  baseStats: STATS
+  baseStats: STATS,
+  initialItems: [ITEM],
+  initialSkills: [SKILL]
 }
 CHARACTER_PAWN := {
   location: BOARD_COORDINATE,
   front: DIRECTION,
-  currentStats: STATS
+  currentStats: STATS,
+  equipedItems: [ITEM],
+  carriedSkills: [SKILL]
 }
 STATS := {
   health: float,
@@ -93,11 +104,30 @@ TURN := {
   canUseSkill: bool,
   canPass: bool
 }
-
+ITEM := {
+  name: string,
+  description: string,
+  type: ITEM_TYPE,
+  stats: STATS,
+}
+ITEM_TYPE := "weapon" | "outfit" | "accessory"
+CHEST := {
+  location: BOARD_COORDINATE,
+  droppedBy: int, // 0 if not a dropped chest
+  turnsToOpen: int
+}
+DEATH_REASON := "attack" | "skill" | "other"
 // TODO: Create update_match_info event and
 // TODO: Specify match updates
 MATCH_UPDATE := { type: MATCH_UPDATE_TYPE, ...}
 MATCH_UPDATE_TYPE := ...
+SKILL := DODGE_SKILL | DASH_SKILL | AUGMENTED_ATTACK_SKILL | SPIN_ATTACK_SKILL
 
 // TODO: Where should initial items and skill go?
+// {
+//   killerCharacterId: int,
+//   deathCharacterId: int,
+//   droppedChest: CHEST,
+//   reason: DEATH_REASON
+// }
 ```
