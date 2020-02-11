@@ -12,6 +12,7 @@ class arena{
     this.state = 'unfilled';
     this.turn = new turn();
     this.mapUpdates = [];
+    this.initialLocationsAvailable = global.startLocations;
   }
   joinCharacter(character){
     if (character){
@@ -54,7 +55,7 @@ class arena{
         if (this.charactersList[i].pawn.currentStats.turnInitiative < this.charactersList[i-1].pawn.currentStats.turnInitiative){
           let tmp = this.charactersList[i];
           this.charactersList[i] = this.charactersList[i-1];
-          this.charactersList[i-1] = tmp;
+          this.charactersList[i-1] = tmp;    console.log('item: ' + item);
           flag = true;
         }
       }
@@ -85,15 +86,15 @@ class arena{
 
     let turnCharacter = this.charactersList[nextTurnCharacterID];
 
-    // TODO: Increase charge turn bar
-
-    await this.turn.next(reason,nextTurnCharacterID);
-
+    await this.turn.next(reason,turnCharacter,nextTurnCharacterID);
 
     let payload = protocol.serverMessages.startTurn.payload;
-    payload.turn = this.turn;
+
+    let getTurnToSend = require('../scripts/getTurnToSend.js');
+    payload.turn = getTurnToSend(this.turn);
 
     let getMovementRange = require('../scripts/getMovementRange.js');
+    let getAttackRange = require('../scripts/getAttackRange.js');
 
     let obstacles = [];
     // Obstacles must contain all obstacles in map and other pawn positions.
@@ -106,7 +107,8 @@ class arena{
     // TODO: Add other obstacles
     payload.inTurnMovementRange = getMovementRange(turnCharacter.pawn,global.arenaMap,obstacles);
 
-    payload.inTurnAttackRange = turnCharacter.pawn.currentStats.attackRange;
+    // TODO: Calculate obstacles in attack range
+    payload.inTurnAttackRange = getAttackRange(turnCharacter.pawn, global.arenaMap,obstacles);
     // TODO: Set map updates types
     // Map updates probably are gonna be set when a skill is used or when a chest is opened. So, updates must be loaded in respective callback function.
     payload.mapUpdates = this.mapUpdates;
@@ -133,7 +135,9 @@ class arena{
       socket.on(protocol.clientMessages.tryPass.eventName, this.charactersList[i].tryPass);
       socket.on(protocol.clientMessages.tryLeave.eventName, this.charactersList[i].tryLeave);
     }
-    this.turn.timer = setTimeout(()=>{this.nextTurn('timeout',nextTurnCharacterID+1);},global.turnDuration);
+
+    let timersHandler = require('../instances/timersHandler.js');
+    this.turn.timer = timersHandler.newTimer(setTimeout(()=>{this.nextTurn('timeout',nextTurnCharacterID+1);},global.turnDuration));
   }
 }
 

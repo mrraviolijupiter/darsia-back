@@ -1,4 +1,5 @@
 let global = require('../instances/constants.js');
+let timersHandler = require('../instances/timersHandler.js');
 
 class turn{
   constructor() {
@@ -11,16 +12,19 @@ class turn{
     this.canUseSkill = false;
     this.canPass = false;
     this.timer = 0;
+    this.initialCharacterLocation = {x: 0, y: 0};
   }
-  next(reason, nextTurnCharacterID){
+  next(reason, turnCharacter, characterId){
     this.turnNumber++;
     this.startReason = reason;
     this.canAttack = true;
     this.canMove = true;
     this.canPass = true;
     this.canUseSkill = true;
-    this.characterInTurn = nextTurnCharacterID;
+    this.characterInTurn = characterId;
     this.remainingSeconds = global.turnDuration;
+    this.initialCharacterLocation = turnCharacter.pawn.location;
+    timersHandler.clearTimeout(this.timer);
   }
 }
 

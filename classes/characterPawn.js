@@ -1,43 +1,19 @@
 let global = require('../instances/constants.js');
 
 class characterPawn{
-  constructor(setup) {
+  constructor(item) {
     this.location = global.defaultPawnStats.location;
     this.direction = global.defaultPawnStats.direction;
     this.currentStats = global.stats;
     this.isReadyToStart = false;
-    if (setup !== undefined) {
-      switch (setup) {
+    this.equipedItems = [];
+    if (item !== undefined) {
+      switch (item) {
         case '1':
-          // Tank
-          this.currentStats.health = global.stats.health + 0.3*global.stats.health;
-          this.currentStats.criticalMultiplier = global.stats.criticalMultiplier - 0.3*global.stats.criticalMultiplier;
-          this.currentStats.turnInitiative = global.stats.turnInitiative - 0.3*global.stats.turnInitiative;
-          this.currentStats.turnSpeed = global.stats.turnSpeed + 0.2*global.stats.turnSpeed;
-          this.location = {x: 4,y: 4};
-          this.currentStats.attackRange = [
-            {x:0,y:1},
-            {x:0,y:-1},
-            {x:1,y:0},
-            {x:-1,y:0}
-          ];
+          this.equipedItems.push(global.sword);
           break;
         case '2':
-          // Assassin
-          this.currentStats.health = global.stats.health - 0.2*global.stats.health;
-          this.currentStats.criticalMultiplier = global.stats.criticalMultiplier + 0.3*global.stats.criticalMultiplier;
-          this.currentStats.turnInitiative = global.stats.turnInitiative + 0.3*global.stats.turnInitiative;
-          this.currentStats.turnSpeed = global.stats.turnSpeed + 0.2*global.stats.turnSpeed;
-          this.currentStats.damage = global.stats.damage + 0.2*global.stats.damage;
-          this.currentStats.turnCharge = global.stats.turnCharge - 0.2*global.stats.turnCharge;
-          this.currentStats.criticalRate = global.stats.criticalRate + 0.2*global.stats.criticalRate;
-          this.location = {x: 5,y: 1};
-          this.currentStats.attackRange = [
-            {x:0,y:1},
-            {x:0,y:-1},
-            {x:1,y:0},
-            {x:-1,y:0}
-          ];
+          this.equipedItems.push(global.bow);
           break;
         case '3':
           break;
@@ -45,6 +21,33 @@ class characterPawn{
           break;
       }
     }
+  }
+  getStats(){
+    let ret = JSON.parse(JSON.stringify(this.currentStats));
+
+    this.equipedItems.forEach(item => {
+      ret.health += item.stats.health;
+      ret.damage += item.stats.damage;
+      ret.jumpHeight += item.stats.jumpHeight;
+      ret.movementSteps += item.stats.movementSteps;
+      ret.evasionRate += item.stats.evasionRate;
+      ret.criticalRate += item.stats.criticalRate;
+      ret.criticalMultiplier += item.stats.criticalMultiplier;
+      ret.turnInitiative += item.stats.turnInitiative;
+      ret.turnCharge += item.stats.turnCharge;
+      ret.turnSpeed += item.stats.turnSpeed;
+      ret.criticalRate += item.stats.criticalRate;
+      if (ret.attackRange === null){
+        ret.attackRange = [item.stats.attackRange[0]];
+      }
+      item.stats.attackRange.forEach(range => {
+        if(ret.attackRange.find(element => element === range)){
+        }else{
+          ret.attackRange.push(range);
+        }
+      });
+    });
+    return ret;
   }
 }
 

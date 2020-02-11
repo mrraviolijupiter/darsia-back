@@ -10,7 +10,7 @@ let protocol = require('../instances/protocol.js');
 // - Store socket id in character
 // - Lastly join character to a new arena
 ////////////////////////////////////////////////////////////
-let matchCharacter = async function(userId, socket, setup) {
+let matchCharacter = async function(userId, socket, item) {
   // Find logged user id
   let user;
   try{
@@ -23,11 +23,11 @@ let matchCharacter = async function(userId, socket, setup) {
   let character;
   // Update character adding a new characterPawn
   try{
-    if(setup !== undefined){
+    if(item !== undefined){
       await Character.updateOne({
         id:user.character.id
       }).set({
-        pawn: new characterPawn(setup)
+        pawn: new characterPawn(item)
       });
     }else{
       await Character.updateOne({
@@ -73,11 +73,11 @@ module.exports = async function (socket) {
     let uid = socket.client.request.url
       .split('force-user=')[1]
       .split('&')[0];
-    if(socket.client.request.url.includes('setup')){
-      let setup = socket.client.request.url
-        .split('setup=')[1]
+    if(socket.client.request.url.includes('item')){
+      let item = socket.client.request.url
+        .split('item=')[1]
         .split('&')[0];
-      matchCharacter(uid, socket, setup);
+      matchCharacter(uid, socket, item);
     }else{
       matchCharacter(uid, socket);
     }

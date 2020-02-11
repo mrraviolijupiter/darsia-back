@@ -10,6 +10,9 @@ module.exports = async function (character, socket){
 
   sails.log.debug('New user joined arena');
 
+  // Set initial pawn locations
+  character.pawn.location = arena.initialLocationsAvailable.pop();
+
   // Move player to the arena environment
   let payload = protocol.serverMessages.goto.payload;
   payload.where = 'arena';
