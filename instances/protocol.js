@@ -1,4 +1,4 @@
-let requestMapInfoCallback = require('../scripts/eventsCB/requestMapInfo.js');
+let requestMatchInfoCallback = require('../scripts/eventsCB/requestMatchInfo.js');
 let matchReadyConfirmCallback = require('../scripts/eventsCB/matchReadyConfirm.js');
 let tryPassCallback = require('../scripts/eventsCB/tryPass.js');
 let tryMoveCallback = require('../scripts/eventsCB/tryMove.js');
@@ -23,10 +23,12 @@ module.exports = {
         pawn: {}
       },
     },
-    mapInfo:{
-      message:'map_info',
+    matchInfo:{
+      message:'match_info',
       payload:{
         turn: {},
+        chests: [],
+        turnOrder: [],
         characters:[],
       }
     },
@@ -65,9 +67,9 @@ module.exports = {
     },
   },
   clientMessages:{
-    requestMapInfo: {
-      eventName: 'request_map_info',
-      callback: requestMapInfoCallback,
+    requestMatchInfo: {
+      eventName: 'request_match_info',
+      callback: requestMatchInfoCallback,
     },
     matchReadyConfirm: {
       eventName: 'match_ready_confirm',

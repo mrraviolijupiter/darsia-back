@@ -57,7 +57,7 @@ let matchCharacter = async function(userId, socket, setup) {
 
     // Create events to listen on this socket
     socket.on(protocol.clientMessages.matchReadyConfirm.eventName, payload => { protocol.clientMessages.matchReadyConfirm.callback(payload, character, arena);});
-    socket.on(protocol.clientMessages.requestMapInfo.eventName, payload => { protocol.clientMessages.requestMapInfo.callback(payload, character, arena);});
+    socket.on(protocol.clientMessages.requestMatchInfo.eventName, payload => { protocol.clientMessages.requestMatchInfo.callback(payload, character, arena);});
   }catch (e) {
     sails.log.error('Fail joining arena. Exception: ' + e);
   }
