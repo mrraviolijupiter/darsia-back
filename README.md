@@ -22,6 +22,8 @@ that we test out the front-back communication
 1 try_leave EMPTY_PAYLOAD
 1 try_open_chest { chestLocation: BOARD_COORDINATE }
 1 try_use_skill { skillName: string }
+1 confirm_use_dash { targetLocation: BOARD_COORDINATE }
+1 confirm_use_spin_attack EMPTY_PAYLOAD
 ```
 
 # Server emitted messages
@@ -40,8 +42,7 @@ that we test out the front-back communication
 * start_turn {
   turn: TURN,
   inTurnMovementRange: [BOARD_COORDINATE],
-  inTurnAttackRange: [BOARD_COORDINATE],
-  matchUpdates: [MATCH_UPDATE],
+  inTurnAttackRange: [BOARD_COORDINATE]
 }
 * move {
   characterId: int,
@@ -49,8 +50,15 @@ that we test out the front-back communication
   availableAttackRange [BOARD_COORDINATE]
 }
 * attack { aggressorId: int, targetId: int, type: HIT_TYPE, damage: float }
+* kill {
+  killerCharacterId: int, // 0 if none
+  killedCharacterId: int,
+  droppedChest: CHEST
+}
 * open_chest { receiverId: int, chest: CHEST }
 1 private_open_chest { receiverId: int, chest: CHEST, skillName: string }
+1 use_dash_info { dashRange: [BOARD_COORDINATE] }
+1 use_spin_attack_info { spinRange: [BOARD_COORDINATE] }
 * use_skill { casterId: int, skillName: string, skill: SKILL }
 * leave { characterId: int }
 * end_match { winnerId: int }
@@ -114,20 +122,11 @@ ITEM_TYPE := "weapon" | "outfit" | "accessory"
 CHEST := {
   location: BOARD_COORDINATE,
   droppedBy: int, // 0 if not a dropped chest
-  turnsToOpen: int
+  turnsToOpen: int // 0 means it is open
 }
-DEATH_REASON := "attack" | "skill" | "other"
-// TODO: Create update_match_info event and
-// TODO: Specify match updates
-MATCH_UPDATE := { type: MATCH_UPDATE_TYPE, ...}
-MATCH_UPDATE_TYPE := ...
 SKILL := DODGE_SKILL | DASH_SKILL | AUGMENTED_ATTACK_SKILL | SPIN_ATTACK_SKILL
-
-// TODO: Where should initial items and skill go?
-// {
-//   killerCharacterId: int,
-//   deathCharacterId: int,
-//   droppedChest: CHEST,
-//   reason: DEATH_REASON
-// }
+DODGE_SKILL := EMPTY_PAYLOAD
+AUGMENTED_ATTACK_SKILL := EMPTY_PAYLOAD
+SPIN_ATTACK_SKILL := EMPTY_PAYLOAD
+DASH_SKILL := { targetLocation: BOARD_COORDINATE }
 ```
