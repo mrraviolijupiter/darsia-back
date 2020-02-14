@@ -5,7 +5,7 @@ module.exports = {
     damage: 4.6,
     jumpHeight: 1,
     movementSteps: 2,
-    attackRange: null,
+    attackRange: [],
     evasionRate:  0.1,
     criticalRate: 0.2,
     criticalMultiplier: 1.5,
