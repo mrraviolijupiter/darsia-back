@@ -55,38 +55,63 @@ class arena{
         if (this.charactersList[i].pawn.currentStats.turnInitiative < this.charactersList[i-1].pawn.currentStats.turnInitiative){
           let tmp = this.charactersList[i];
           this.charactersList[i] = this.charactersList[i-1];
-          this.charactersList[i-1] = tmp;    console.log('item: ' + item);
+          this.charactersList[i-1] = tmp;
           flag = true;
         }
       }
     }
-    this.characterIdList = [];
+    this.characterInitiativeList = [];
     for (let character in this.charactersList){
-      this.characterIdList.push(this.charactersList[character].id);
+      this.characterInitiativeList.push(this.charactersList[character].id);
     }
     let protocol = require('../instances/protocol.js');
     let payload = protocol.serverMessages.matchReady.payload;
-    payload.turnOrder = this.characterIdList;
+    payload.turnOrder = this.characterInitiativeList;
 
     // Send startMatch message with characterIdList ordered by initiative.
     sails.sockets.broadcast(this.getRoomName(),protocol.serverMessages.startMatch.message,payload);
     this.state = 'matchStarted';
 
-    this.nextTurn('start_match',this.characterIdList[0]);
+    this.charactersList[0].pawn.currentStats.turnCharge = 0;
+    this.nextTurn('start_match',this.charactersList[0]);
 
   }
-  async nextTurn(reason,nextTurnCharacterID){
+  endTurn(){
+    let absoluteTurnCharge = [];
+    // Increase turn charge using turnSpeed
+    let pawn = require('../classes/characterPawn.js');
+    this.charactersList.forEach(character => {
+      let tmp = new pawn();
+      Object.assign(tmp,character.pawn);
+      character.pawn.currentStats.turnCharge += tmp.getStats().turnSpeed;
+      if (character.pawn.currentStats.turnCharge > character.baseStats.turnCharge){
+        character.pawn.currentStats.turnCharge = character.baseStats.turnCharge;
+      }
+
+      // Calculate absolute turn bar for each character
+      absoluteTurnCharge.push({
+        characterId:character.id,
+        charge:character.pawn.currentStats.turnCharge / character.baseStats.turnCharge,
+      });
+    });
+
+    let aux = absoluteTurnCharge.find(element => element.charge === 1);
+
+    if (aux){
+      let ret = this.charactersList.find(element => element.id === aux.characterId);
+      // Remove charge turn
+      ret.pawn.currentStats.turnCharge = 0;
+      return ret;
+    }else{
+      // TODO: Think about next turn instead of endTurn.
+      return this.endTurn();
+    }
+  }
+  async nextTurn(reason,turnCharacter){
     let protocol = require('../instances/protocol.js');
     let global = require('../instances/constants.js');
 
-    // Restart turns roulette
-    if (nextTurnCharacterID >= this.charactersList.length){
-      nextTurnCharacterID = 0;
-    }
-
-    let turnCharacter = this.charactersList[nextTurnCharacterID];
-
-    await this.turn.next(reason,turnCharacter,nextTurnCharacterID);
+    await this.turn.next(reason,turnCharacter,turnCharacter.id);
 
     let payload = protocol.serverMessages.startTurn.payload;
 
@@ -137,8 +162,11 @@ class arena{
     }
 
     let timersHandler = require('../instances/timersHandler.js');
-    this.turn.timer = timersHandler.newTimer(setTimeout(()=>{this.nextTurn('timeout',nextTurnCharacterID+1);},global.turnDuration));
+    this.turn.timer = timersHandler.newTimer(setTimeout(()=>{
+      this.nextTurn('timeout',this.endTurn());
+    },global.turnDuration));
   }
 }
+
 
 module.exports = arena;

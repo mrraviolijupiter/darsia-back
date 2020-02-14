@@ -11,7 +11,7 @@ module.exports = {
     criticalMultiplier: 1.5,
     turnInitiative: 1,
     turnSpeed: 1,
-    turnCharge: 5,
+    turnCharge: 10,
   },
 
   arena:{
@@ -33,7 +33,7 @@ module.exports = {
       criticalRate: 0,
       criticalMultiplier: 0.2,
       turnInitiative: 0,
-      turnSpeed: 0,
+      turnSpeed: 3,
       turnCharge: 0,
     },
   },
