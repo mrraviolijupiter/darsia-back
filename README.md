@@ -14,12 +14,16 @@ that we test out the front-back communication
 # Client emitted messages
 
 ```js
-1 request_map_info EMPTY_PAYLOAD
+1 request_match_info EMPTY_PAYLOAD
 1 match_ready_confirm EMPTY_PAYLOAD
 1 try_pass EMPTY_PAYLOAD
 1 try_move { targetLocation: BOARD_COORDINATE }
 1 try_attack { targetId: int }
 1 try_leave EMPTY_PAYLOAD
+1 try_open_chest { chestLocation: BOARD_COORDINATE }
+1 try_use_skill { skillName: string }
+1 confirm_use_dash { targetLocation: BOARD_COORDINATE }
+1 confirm_use_spin_attack EMPTY_PAYLOAD
 ```
 
 # Server emitted messages
@@ -27,8 +31,10 @@ that we test out the front-back communication
 ```js
 1 goto { where: MAP }
 * join { character: CHARACTER }
-1 map_info {
+1 match_info {
   turn: TURN,
+  turnOrder: [int],
+  chests: [CHEST],
   characters: [CHARACTER]
 }
 * match_ready EMPTY_PAYLOAD
@@ -36,8 +42,7 @@ that we test out the front-back communication
 * start_turn {
   turn: TURN,
   inTurnMovementRange: [BOARD_COORDINATE],
-  inTurnAttackRange: [BOARD_COORDINATE],
-  mapUpdates: [MAP_UPDATE],
+  inTurnAttackRange: [BOARD_COORDINATE]
 }
 * move {
   characterId: int,
@@ -45,6 +50,16 @@ that we test out the front-back communication
   availableAttackRange [BOARD_COORDINATE]
 }
 * attack { aggressorId: int, targetId: int, type: HIT_TYPE, damage: float }
+* kill {
+  killerCharacterId: int, // 0 if none
+  killedCharacterId: int,
+  droppedChest: CHEST
+}
+* open_chest { receiverId: int, chest: CHEST }
+1 private_open_chest { receiverId: int, chest: CHEST, skillName: string }
+1 use_dash_info { dashRange: [BOARD_COORDINATE] }
+1 use_spin_attack_info { spinRange: [BOARD_COORDINATE] }
+* use_skill { casterId: int, skillName: string, skill: SKILL }
 * leave { characterId: int }
 * end_match { winnerId: int }
 ```
@@ -61,12 +76,16 @@ CHARACTER := {
   name: string,
   pawn: CHARACTER_PAWN,
   color: int, // TODO: Will be replaced with initial outfits
-  baseStats: STATS
+  baseStats: STATS,
+  initialItems: [ITEM],
+  initialSkills: [SKILL]
 }
 CHARACTER_PAWN := {
   location: BOARD_COORDINATE,
   front: DIRECTION,
-  currentStats: STATS
+  currentStats: STATS,
+  equipedItems: [ITEM],
+  carriedSkills: [SKILL]
 }
 STATS := {
   health: float,
@@ -93,11 +112,21 @@ TURN := {
   canUseSkill: bool,
   canPass: bool
 }
-
-// TODO: Create update_map_info event and
-// TODO: Specify map updates
-MAP_UPDATE := { type: MAP_UPDATE_TYPE, ...}
-MAP_UPDATE_TYPE := ...
-
-// TODO: Where should initial items and skill go?
+ITEM := {
+  name: string,
+  description: string,
+  type: ITEM_TYPE,
+  stats: STATS,
+}
+ITEM_TYPE := "weapon" | "outfit" | "accessory"
+CHEST := {
+  location: BOARD_COORDINATE,
+  droppedBy: int, // 0 if not a dropped chest
+  turnsToOpen: int // 0 means it is open
+}
+SKILL := DODGE_SKILL | DASH_SKILL | AUGMENTED_ATTACK_SKILL | SPIN_ATTACK_SKILL
+DODGE_SKILL := EMPTY_PAYLOAD
+AUGMENTED_ATTACK_SKILL := EMPTY_PAYLOAD
+SPIN_ATTACK_SKILL := EMPTY_PAYLOAD
+DASH_SKILL := { targetLocation: BOARD_COORDINATE }
 ```
