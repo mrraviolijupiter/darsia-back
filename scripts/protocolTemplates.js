@@ -43,7 +43,7 @@ const conformsTo = template => source => {
 
 const isInteger = _.isInteger;
 const isFloat = _.isNumber;
-const isFloatInRange = (min, max) => t => _.isNumber(t) && min <= t && t <= max;
+const isFloatInRange = (min, max) => t => isFloat(t) && min <= t && t <= max;
 const isBoolean = _.isBoolean;
 const isString = _.isString;
 const isArray = _.isArray;
