@@ -21,7 +21,7 @@ that we test out the front-back communication
 1 try_attack { targetId: int }
 1 try_leave EMPTY_PAYLOAD
 1 try_open_chest { chestLocation: BOARD_COORDINATE }
-1 try_use_skill { skillName: string }
+1 try_use_skill { skillName: SKILL_NAME }
 1 confirm_use_dash { targetLocation: BOARD_COORDINATE }
 1 confirm_use_spin_attack EMPTY_PAYLOAD
 ```
@@ -56,10 +56,10 @@ that we test out the front-back communication
   droppedChest: CHEST
 }
 * open_chest { receiverId: int, chest: CHEST }
-1 private_open_chest { receiverId: int, chest: CHEST, skillName: string }
+1 private_open_chest { receiverId: int, chest: CHEST, skillName: SKILL_NAME }
 1 use_dash_info { dashRange: [BOARD_COORDINATE] }
 1 use_spin_attack_info { spinRange: [BOARD_COORDINATE] }
-* use_skill { casterId: int, skillName: string, skill: SKILL }
+* use_skill { casterId: int, skillName: SKILL_NAME, skill: SKILL }
 * leave { characterId: int }
 * end_match { winnerId: int }
 ```
@@ -77,15 +77,15 @@ CHARACTER := {
   pawn: CHARACTER_PAWN,
   color: int, // TODO: Will be replaced with initial outfits
   baseStats: STATS,
-  initialItems: [ITEM],
-  initialSkills: [SKILL]
+  initialItems: [ITEM_NAME],
+  initialSkills: [SKILL_NAME]
 }
 CHARACTER_PAWN := {
   location: BOARD_COORDINATE,
   front: DIRECTION,
   currentStats: STATS,
-  equipedItems: [ITEM],
-  carriedSkills: [SKILL]
+  equipedItems: [ITEM_NAME],
+  carriedSkills: [SKILL_NAME]
 }
 STATS := {
   health: float,
@@ -113,11 +113,12 @@ TURN := {
   canPass: bool
 }
 ITEM := {
-  name: string,
+  name: ITEM_NAME,
   description: string,
   type: ITEM_TYPE,
   stats: STATS,
 }
+ITEM_NAME := "sword" | "bow"
 ITEM_TYPE := "weapon" | "outfit" | "accessory"
 CHEST := {
   location: BOARD_COORDINATE,
@@ -129,4 +130,5 @@ DODGE_SKILL := EMPTY_PAYLOAD
 AUGMENTED_ATTACK_SKILL := EMPTY_PAYLOAD
 SPIN_ATTACK_SKILL := EMPTY_PAYLOAD
 DASH_SKILL := { targetLocation: BOARD_COORDINATE }
+SKILL_NAME := "dodge" | "dash" | "augmentedAttack" | "spinAttack"
 ```
