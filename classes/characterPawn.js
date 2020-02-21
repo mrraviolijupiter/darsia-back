@@ -3,10 +3,11 @@ let global = require('../instances/constants.js');
 class characterPawn{
   constructor(item) {
     this.location = global.defaultPawnStats.location;
-    this.direction = global.defaultPawnStats.direction;
+    this.front = global.defaultPawnStats.direction;
     this.currentStats = global.stats;
     this.isReadyToStart = false;
     this.equipedItems = [];
+    this.carriedSkills = [];
     if (item !== undefined) {
       switch (item) {
         case '1':

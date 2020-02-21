@@ -13,6 +13,8 @@ module.exports = function(character,isArray= false){
       delete ret[ret.length-1].tryAttack;
       delete ret[ret.length-1].tryPass;
       delete ret[ret.length-1].pawn.isReadyToStart;
+      delete ret[ret.length-1].baseStats.createdAt;
+      delete ret[ret.length-1].baseStats.updatedAt;
     });
     return ret;
   }
@@ -28,6 +30,8 @@ module.exports = function(character,isArray= false){
     delete ret.tryAttack;
     delete ret.tryPass;
     delete ret.pawn.isReadyToStart;
+    delete ret.baseStats.createdAt;
+    delete ret.baseStats.updatedAt;
     return ret;
   }
 };
