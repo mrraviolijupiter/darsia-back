@@ -4,7 +4,7 @@ const assert = (condition, message) => { if (!condition) throw message };
 
 const copyFromTemplate = (source, template) => {
   if (_.isFunction(template)) {
-    assert(template(source), `value=${source} does not pass validator=${template}`);
+    assert(template(source), `value=${JSON.stringify(source, null, "  ")} does not pass validator=${template}`);
     return source;
   } else if (_.isArray(template)) {
     assert(template.length == 1, `template array.length != 1, array=${template}`);
@@ -76,6 +76,7 @@ const CHARACTER_PAWN = {
   equipedItems: [isItemName],
   carriedSkills: [isSkillName]
 };
+
 const CHARACTER = {
   id: isInteger,
   name: isString,
@@ -85,6 +86,9 @@ const CHARACTER = {
   initialItems: [isItemName],
   initialSkills: [isSkillName]
 }
+const copyAsCharacter = source => {console.log(copyFromTemplate(source, CHARACTER)); return copyFromTemplate(source, CHARACTER);};
+const isCharacter = conformsTo(CHARACTER);
+
 const TURN = {
   startReason: isStartTurnReason,
   remainingSeconds: isFloat,
@@ -95,6 +99,8 @@ const TURN = {
   canUseSkill: isBoolean,
   canPass: isBoolean
 };
+const copyAsTurn = source => copyFromTemplate(source, TURN);
+const isTurn = conformsTo(TURN);
 
 // Event templates
 
@@ -103,150 +109,14 @@ const EVENT_MATCH_INFO = {
   turn: TURN,
   turnOrder: [isInteger]
 }
-const copyAsMatchInfo = copyFromTemplate(EVENT_MATCH_INFO);
+const copyAsMatchInfo = source => copyFromTemplate(source, EVENT_MATCH_INFO);
 const isMatchInfo = conformsTo(EVENT_MATCH_INFO);
 
-
-if (require.main === module) {
-  const matchInfoExample = {
-    farafa: 1,
-    turnOrder: [2, 3, 1],
-    turn: {
-      startReason: "pass",
-      remainingSeconds: 10.3,
-      turnNumber: 3,
-      characterInTurn: 2,
-      canMove: true,
-      canAttack: true,
-      canUseSkill: true,
-      canPass: true
-    },
-    characters: [
-      {
-        id: 1,
-        name: "Reddish1",
-        initialItems: ["bow", "bow", "sword"],
-        initialSkills: ["dodge", "augmentedAttack"],
-        pawn: {
-          location: { x: 1, y: 1 },
-          front: "N",
-          currentStats: {
-            health: 10,
-            damage: 3,
-            movementSteps: 3,
-            jumpHeight: 1,
-            attackRange: [{ x: 0, y: 1 }, { x: 0, y: 2 }],
-            evasionRate:  0.2,
-            criticalRate: 0.17,
-            criticalMultiplier: 1.5,
-            turnInitiative: 1,
-            turnSpeed: 20,
-            turnCharge: 20,
-          },
-          equipedItems: ["bow", "bow", "sword"],
-          carriedSkills: ["dodge", "augmentedAttack"]
-        },
-        color: 1,
-        baseStats: {
-          health: 20,
-          damage: 3,
-          movementSteps: 3,
-          jumpHeight: 1,
-          attackRange: [{ x: 0, y: 1 }, { x: 0, y: 2 }],
-          evasionRate:  0.2,
-          criticalRate: 0.17,
-          criticalMultiplier: 1.5,
-          turnInitiative: 1,
-          turnSpeed: 20,
-          turnCharge: 100
-        }
-      },
-      {
-        id: 2,
-        name: "Blubble2",
-        initialItems: ["bow", "bow", "sword"],
-        initialSkills: ["dodge", "augmentedAttack"],
-        pawn: {
-          location: { x: 8, y: 8 },
-          front: "S",
-          currentStats: {
-            health: 15,
-            damage: 4,
-            movementSteps: 2,
-            jumpHeight: 2,
-            attackRange: [{ x: 0, y: 3 }, { x: 0, y: 2 }, { x: 1, y: 2 }],
-            evasionRate:  0.3,
-            criticalRate: 0.27,
-            criticalMultiplier: 1.6,
-            turnInitiative: 2,
-            turnSpeed: 30,
-            turnCharge: 50
-          },
-          equipedItems: [],
-          carriedSkills: [],
-        },
-        color: 2,
-        baseStats: {
-          health: 15,
-          damage: 4,
-          movementSteps: 2,
-          jumpHeight: 2,
-          attackRange: [{ x: 0, y: 3 }, { x: 0, y: 2 }, { x: 1, y: 2 }],
-          evasionRate:  0.3,
-          criticalRate: 0.27,
-          criticalMultiplier: 1.6,
-          turnInitiative: 2,
-          turnSpeed: 30,
-          turnCharge: 100
-        }
-      },
-      {
-        id: 3,
-        name: "Greenish3",
-        initialItems: ["bow", "bow", "sword"],
-        initialSkills: ["dodge", "augmentedAttack"],
-        pawn: {
-          location: { x: 1, y: 8 },
-          front: "S",
-          currentStats: {
-            health: 30,
-            damage: 4,
-            movementSteps: 2,
-            jumpHeight: 2,
-            attackRange: [{ x: 0, y: 3 }, { x: 0, y: 2 }, { x: 1, y: 2 }],
-            evasionRate:  0.3,
-            criticalRate: 0.27,
-            criticalMultiplier: 1.6,
-            turnInitiative: 2,
-            turnSpeed: 30,
-            turnCharge: 50,
-          },
-          equipedItems: [],
-          carriedSkills: ["dodge"]
-        },
-        color: 3,
-        baseStats: {
-          health: 30,
-          damage: 4,
-          movementSteps: 2,
-          jumpHeight: 2,
-          attackRange: [{ x: 0, y: 3 }, { x: 0, y: 2 }, { x: 1, y: 2 }],
-          evasionRate:  0.3,
-          criticalRate: 0.27,
-          criticalMultiplier: 1.6,
-          turnInitiative: 2,
-          turnSpeed: 30,
-          turnCharge: 100
-        }
-      },
-    ]
-  };
-  let copiedMatchInfo = copyFromTemplate(matchInfoExample, EVENT_MATCH_INFO);
-  console.log(isMatchInfo(copiedMatchInfo));
-  console.log(isMatchInfo(matchInfoExample));
-}
-
 module.exports = {
+  copyAsCharacter,
+  isCharacter,
+  copyAsTurn,
+  isTurn,
   copyAsMatchInfo,
   isMatchInfo,
 }
