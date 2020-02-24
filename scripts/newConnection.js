@@ -2,6 +2,7 @@ let characterPawn = require('../classes/characterPawn.js');
 let joinArena = require('./joinArena.js');
 let activeArenas = require('../instances/activeArenas.js');
 let protocol = require('../instances/protocol.js');
+let global = require('../instances/constants.js');
 
 ////////////////////////////////////////////////////////////
 // This function does:
@@ -27,13 +28,15 @@ let matchCharacter = async function(userId, socket, item) {
       await Character.updateOne({
         id:user.character.id
       }).set({
-        pawn: new characterPawn(item)
+        pawn: new characterPawn(item),
+        initialItems: [global.getItem(item)]
       });
     }else{
       await Character.updateOne({
-        id:user.character.id
+        id:user.character.id,
       }).set({
-        pawn: new characterPawn()
+        pawn: new characterPawn(),
+        initialItems: []
       });
     }
     character = await Character.findOne({id:user.character.id}).populate('baseStats');
@@ -46,21 +49,17 @@ let matchCharacter = async function(userId, socket, item) {
   character.socket = socket.id;
 
   // Join character and socket to a non-full arena
-  try {
-    let arena = await joinArena(character,socket);
+  let arena = await joinArena(character,socket);
 
-    if (arena.isFull()){
-      // Notify all players that match can start
-      sails.sockets.broadcast(arena.getRoomName(),protocol.serverMessages.matchReady.message,protocol.serverMessages.matchReady.payload);
-      arena.state = 'readyToStart';
-    }
-
-    // Create events to listen on this socket
-    socket.on(protocol.clientMessages.matchReadyConfirm.eventName, payload => { protocol.clientMessages.matchReadyConfirm.callback(payload, character, arena);});
-    socket.on(protocol.clientMessages.requestMatchInfo.eventName, payload => { protocol.clientMessages.requestMatchInfo.callback(payload, character, arena);});
-  }catch (e) {
-    sails.log.error('Fail joining arena. Exception: ' + e);
+  if (arena.isFull()){
+    // Notify all players that match can start
+    sails.sockets.broadcast(arena.getRoomName(),protocol.serverMessages.matchReady.message,protocol.serverMessages.matchReady.payload);
+    arena.state = 'readyToStart';
   }
+
+  // Create events to listen on this socket
+  socket.on(protocol.clientMessages.matchReadyConfirm.eventName, payload => { protocol.clientMessages.matchReadyConfirm.callback(payload, character, arena);});
+  socket.on(protocol.clientMessages.requestMatchInfo.eventName, payload => { protocol.clientMessages.requestMatchInfo.callback(payload, character, arena);});
 };
 
 module.exports = async function (socket) {

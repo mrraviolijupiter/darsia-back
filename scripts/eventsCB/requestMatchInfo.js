@@ -6,7 +6,7 @@ module.exports = function (payload, character, arena) {
   try {
     let playersList = activeArenas.currentArenas.find(aren => aren.getRoomName() === arena.getRoomName()).charactersList;
     let ret = {
-      characters: getCharacterToSend(playersList,true),
+      characters: playersList.map(getCharacterToSend),
       turn: getTurnToSend(arena.turn)
     };
     sails.sockets.broadcast(character.socket,'match_info',ret);

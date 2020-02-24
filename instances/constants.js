@@ -1,3 +1,4 @@
+let _ = require('lodash');
 module.exports = {
   // Game design constants
   stats:{
@@ -19,6 +20,16 @@ module.exports = {
   },
 
   // Items
+  getItem: function(item){
+    switch (item) {
+      case '1':
+        return _.cloneDeep(this.sword);
+        break;
+      case '2':
+        return _.cloneDeep(this.bow);
+        break;
+    }
+  },
   sword: {
     name: 'sword',
     description: 'The most powerful sword',
@@ -66,7 +77,7 @@ module.exports = {
       x: 1,
       y: 1,
     },
-    direction: 'north',
+    front: 'N',
   },
 
   turnDuration: 10000,

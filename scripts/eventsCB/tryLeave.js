@@ -4,6 +4,12 @@ module.exports = function (payload, startTurnPayload, arena, character) {
   }
 
   let protocol = require('../../instances/protocol.js');
+
+  // socket.off(protocol.clientMessages.tryMove.eventName,this.charactersList[i].tryMove);
+  // socket.off(protocol.clientMessages.tryAttack.eventName,this.charactersList[i].tryAttack);
+  // socket.off(protocol.clientMessages.tryLeave.eventName,this.charactersList[i].tryLeave);
+  // socket.off(protocol.clientMessages.tryPass.eventName,this.charactersList[i].tryPass);
+
   // Remove character from list
   arena.charactersList.splice(arena.charactersList.indexOf(character), 1);
 

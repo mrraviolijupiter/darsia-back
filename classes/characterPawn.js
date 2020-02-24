@@ -3,7 +3,7 @@ let global = require('../instances/constants.js');
 class characterPawn{
   constructor(item) {
     this.location = global.defaultPawnStats.location;
-    this.front = global.defaultPawnStats.direction;
+    this.front = global.defaultPawnStats.front;
     this.currentStats = global.stats;
     this.isReadyToStart = false;
     this.equipedItems = [];

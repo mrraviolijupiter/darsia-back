@@ -19,7 +19,7 @@ module.exports = async function (character, socket){
   sails.sockets.broadcast(character.socket, protocol.serverMessages.goto.message, payload);
 
   // Notify other players in arena that a new player joined
-  sails.sockets.broadcast(arena.getRoomName(),protocol.serverMessages.join.message,getCharacterToSend(character));
+  sails.sockets.broadcast(arena.getRoomName(),protocol.serverMessages.join.message,{character: getCharacterToSend(character)});
 
   return arena;
 };

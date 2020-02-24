@@ -8,7 +8,7 @@ const copyFromTemplate = (source, template) => {
     return source;
   } else if (_.isArray(template)) {
     assert(template.length == 1, `template array.length != 1, array=${template}`);
-    assert(_.isArray(source), `template is array but source is not, source=${source}, tempate=${template}`);
+    assert(_.isArray(source), `template is array but source is not, source=${source}, template=${JSON.stringify(template, null, "  ")}`);
     let elementTemplate = template[0];
     return source.map(element => copyFromTemplate(element, elementTemplate));
   } else if (_.isObject(template)) {
@@ -86,7 +86,7 @@ const CHARACTER = {
   initialItems: [isItemName],
   initialSkills: [isSkillName]
 }
-const copyAsCharacter = source => {console.log(copyFromTemplate(source, CHARACTER)); return copyFromTemplate(source, CHARACTER);};
+const copyAsCharacter = source => copyFromTemplate(source, CHARACTER);
 const isCharacter = conformsTo(CHARACTER);
 
 const TURN = {
@@ -104,6 +104,14 @@ const isTurn = conformsTo(TURN);
 
 // Event templates
 
+const EVENT_START_TURN = {
+  inTurnMovementRange: [BOARD_COORDINATE],
+  inTurnAttackRange: [BOARD_COORDINATE],
+  turn: TURN,
+}
+const copyAsStartTurn = source => copyFromTemplate(source, EVENT_START_TURN);
+const isStartTurn = conformsTo(EVENT_START_TURN);
+
 const EVENT_MATCH_INFO = {
   characters: [CHARACTER],
   turn: TURN,
@@ -119,4 +127,6 @@ module.exports = {
   isTurn,
   copyAsMatchInfo,
   isMatchInfo,
+  copyAsStartTurn,
+  isStartTurn,
 }
