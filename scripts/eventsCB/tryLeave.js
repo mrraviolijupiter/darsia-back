@@ -10,8 +10,8 @@ module.exports = function (payload, startTurnPayload, arena, character) {
   socket.off(protocol.clientMessages.tryAttack.eventName,character.tryAttack);
   socket.off(protocol.clientMessages.tryLeave.eventName,character.tryLeave);
   socket.off(protocol.clientMessages.tryPass.eventName,character.tryPass);
-  socket.off(protocol.clientMessages.matchReadyConfirm.eventName, payload => { protocol.clientMessages.matchReadyConfirm.callback(payload, character, arena);});
-  socket.off(protocol.clientMessages.requestMatchInfo.eventName, payload => { protocol.clientMessages.requestMatchInfo.callback(payload, character, arena);});
+  socket.off(protocol.clientMessages.matchReadyConfirm.eventName, p => { protocol.clientMessages.matchReadyConfirm.callback(p, character, arena);});
+  socket.off(protocol.clientMessages.requestMatchInfo.eventName, p => { protocol.clientMessages.requestMatchInfo.callback(p, character, arena);});
 
   // Remove character from list
   arena.charactersList.splice(arena.charactersList.indexOf(character), 1);
