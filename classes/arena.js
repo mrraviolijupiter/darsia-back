@@ -14,6 +14,7 @@ class arena{
     this.turn = new turn();
     this.mapUpdates = [];
     this.initialLocationsAvailable = global.startLocations;
+    this.characterInitiativeList = [];
   }
   joinCharacter(character){
     if (character){
@@ -61,7 +62,6 @@ class arena{
         }
       }
     }
-    this.characterInitiativeList = [];
     for (let character in this.charactersList){
       this.characterInitiativeList.push(this.charactersList[character].id);
     }
