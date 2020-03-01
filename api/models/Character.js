@@ -37,6 +37,10 @@ module.exports = {
       type: 'json',
     },
 
+    initialItems:{
+      type: 'json',
+    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

@@ -59,6 +59,15 @@ module.exports = {
         availableAttackRange: [],
       }
     },
+    attack:{
+      message: 'attack',
+      payload: {
+        aggressorId: 0,
+        targetId: 0,
+        type: '',
+        damage: 0.0,
+      },
+    },
     leave:{
       message: 'leave',
       payload:{

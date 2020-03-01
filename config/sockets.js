@@ -65,13 +65,26 @@ module.exports.sockets = {
   *                                                                          *
   ***************************************************************************/
 
-  // afterDisconnect: function(session, socket, done) {
-  //
-  //   // By default: do nothing.
-  //   // (but always trigger the callback)
-  //   return done();
-  //
-  // },
+  afterDisconnect: function(session, socket, done) {
+    let activeArenas = require('../instances/activeArenas.js');
+    let tryLeave = require('../scripts/eventsCB/tryLeave.js');
+    let character;
+    let arena;
+
+    arena = activeArenas.currentArenas.find(a => {
+      let tmp = a.charactersList.find(e => e.socket === socket.id);
+      if(tmp){
+        character = tmp;
+      }
+    });
+
+    if (arena && character){
+      tryLeave({},{},arena,character);
+    }
+    console.log('character disconnected');
+    return done();
+
+  },
 
 
   /***************************************************************************

@@ -1,5 +1,6 @@
 let global = require('../instances/constants.js');
 let turn = require('./turn.js');
+let {copyAsStartTurn} = require('../scripts/protocolTemplates.js');
 
 class arena{
   constructor(character){
@@ -13,6 +14,7 @@ class arena{
     this.turn = new turn();
     this.mapUpdates = [];
     this.initialLocationsAvailable = global.startLocations;
+    this.characterInitiativeList = [];
   }
   joinCharacter(character){
     if (character){
@@ -60,7 +62,6 @@ class arena{
         }
       }
     }
-    this.characterInitiativeList = [];
     for (let character in this.charactersList){
       this.characterInitiativeList.push(this.charactersList[character].id);
     }
@@ -134,11 +135,8 @@ class arena{
 
     // TODO: Calculate obstacles in attack range
     payload.inTurnAttackRange = getAttackRange(turnCharacter.pawn, global.arenaMap,obstacles);
-    // TODO: Set map updates types
-    // Map updates probably are gonna be set when a skill is used or when a chest is opened. So, updates must be loaded in respective callback function.
-    payload.mapUpdates = this.mapUpdates;
 
-    sails.sockets.broadcast(this.getRoomName(),protocol.serverMessages.startTurn.message,payload);
+    sails.sockets.broadcast(this.getRoomName(),protocol.serverMessages.startTurn.message,copyAsStartTurn(payload));
 
     for (let i in this.charactersList){
       let socket = sails.sockets.get(this.charactersList[i].socket);

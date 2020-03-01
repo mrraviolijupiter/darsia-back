@@ -1,37 +1,10 @@
+let { copyAsCharacter } = require('../scripts/protocolTemplates.js');
+let _ = require('lodash');
 // TODO: Set Stat table to character. Currently only id is sent
-module.exports = function(character,isArray= false){
-  if (isArray){
-    let ret = [];
-    character.forEach(char=>{
-      ret.push(JSON.parse(JSON.stringify(char)));
-      delete ret[ret.length-1].socket;
-      delete ret[ret.length-1].updatedAt;
-      delete ret[ret.length-1].createdAt;
-      delete ret[ret.length-1].user;
-      delete ret[ret.length-1].tryLeave;
-      delete ret[ret.length-1].tryMove;
-      delete ret[ret.length-1].tryAttack;
-      delete ret[ret.length-1].tryPass;
-      delete ret[ret.length-1].pawn.isReadyToStart;
-      delete ret[ret.length-1].baseStats.createdAt;
-      delete ret[ret.length-1].baseStats.updatedAt;
-    });
-    return ret;
-  }
-  else{
-    let ret;
-    ret = JSON.parse(JSON.stringify(character));
-    delete ret.socket;
-    delete ret.updatedAt;
-    delete ret.createdAt;
-    delete ret.user;
-    delete ret.tryLeave;
-    delete ret.tryMove;
-    delete ret.tryAttack;
-    delete ret.tryPass;
-    delete ret.pawn.isReadyToStart;
-    delete ret.baseStats.createdAt;
-    delete ret.baseStats.updatedAt;
-    return ret;
-  }
+module.exports = function(initialCharacter){
+  let character = _.cloneDeep(initialCharacter);
+  character.initialItems = character.initialItems.map(i => i.name);
+  character.pawn.equipedItems = character.pawn.equipedItems.map(i => i.name);
+  character.initialSkills = []; // TODO: Implement initial skills on character creation(?
+  return copyAsCharacter(character);
 };

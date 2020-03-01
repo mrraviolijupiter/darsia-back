@@ -1,5 +1,5 @@
 module.exports = function (payload, startTurnPayload, arena, character) {
-  if(character.id === arena.charactersList[arena.turn.characterInTurn].id){
+  if(character.id === arena.charactersList.find(i => i.id === arena.turn.characterInTurn).id){
     const targetLocation = JSON.parse(payload).targetLocation;
     if (startTurnPayload.inTurnMovementRange.find(location => location.x===targetLocation.x && location.y===targetLocation.y)){
       let protocol = require('../../instances/protocol.js');

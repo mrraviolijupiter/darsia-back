@@ -3,7 +3,7 @@ let timersHandler = require('../instances/timersHandler.js');
 
 class turn{
   constructor() {
-    this.startReason = '';
+    this.startReason = 'start_match';
     this.remainingSeconds = 0.0;
     this.turnNumber = 0;
     this.characterInTurn = 0;
