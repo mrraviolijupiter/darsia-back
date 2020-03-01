@@ -35,7 +35,9 @@ that we test out the front-back communication
   turn: TURN,
   turnOrder: [int],
   chests: [CHEST],
-  characters: [CHARACTER]
+  characters: [CHARACTER],
+  numberOfPlayers: int,
+  state: MATCH_STATE
 }
 * match_ready EMPTY_PAYLOAD
 * start_match { turnOrder: [int] }
@@ -101,6 +103,7 @@ STATS := {
   turnCharge: float
 }
 HIT_TYPE := "regular" | "miss" | "critical"
+MATCH_STATE := "lobby" | "ready" | "started" | "finished"
 START_TURN_REASON := "start_match" | "timeout" | "pass"
 TURN := {
   startReason: START_TURN_REASON,
