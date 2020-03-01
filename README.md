@@ -35,7 +35,10 @@ that we test out the front-back communication
   turn: TURN,
   turnOrder: [int],
   chests: [CHEST],
-  characters: [CHARACTER]
+  characters: [CHARACTER],
+  clientCharacterId: int, // of the client whom requested the match_info
+  numberOfPlayers: int,
+  state: MATCH_STATE
 }
 * match_ready EMPTY_PAYLOAD
 * start_match { turnOrder: [int] }
@@ -59,7 +62,7 @@ that we test out the front-back communication
 1 private_open_chest { receiverId: int, chest: CHEST, skillName: SKILL_NAME }
 1 use_dash_info { dashRange: [BOARD_COORDINATE] }
 1 use_spin_attack_info { spinRange: [BOARD_COORDINATE] }
-* use_skill { casterId: int, skillName: SKILL_NAME, skill: SKILL }
+* use_skill { casterId: int, skillName: SKILL_NAME, skill: CASTING_INFO }
 * leave { characterId: int }
 * end_match { winnerId: int }
 ```
@@ -101,6 +104,7 @@ STATS := {
   turnCharge: float
 }
 HIT_TYPE := "regular" | "miss" | "critical"
+MATCH_STATE := "lobby" | "ready" | "started" | "finished"
 START_TURN_REASON := "start_match" | "timeout" | "pass"
 TURN := {
   startReason: START_TURN_REASON,
@@ -125,10 +129,15 @@ CHEST := {
   droppedBy: int, // 0 if not a dropped chest
   turnsToOpen: int // 0 means it is open
 }
-SKILL := DODGE_SKILL | DASH_SKILL | AUGMENTED_ATTACK_SKILL | SPIN_ATTACK_SKILL
-DODGE_SKILL := EMPTY_PAYLOAD
-AUGMENTED_ATTACK_SKILL := EMPTY_PAYLOAD
-SPIN_ATTACK_SKILL := EMPTY_PAYLOAD
-DASH_SKILL := { targetLocation: BOARD_COORDINATE }
+SKILL := {
+  name: SKILL_NAME,
+  description: string
+}
+
+CASTING_INFO := DODGE_SKILL | DASH_SKILL | AUGMENTED_ATTACK_SKILL | SPIN_ATTACK_SKILL
+DODGE_CASTING_INFO := EMPTY_PAYLOAD
+AUGMENTED_ATTACK_CASTING_INFO := EMPTY_PAYLOAD
+SPIN_ATTACK_CASTING_INFO := EMPTY_PAYLOAD
+DASH_CASTING_INFO := { targetLocation: BOARD_COORDINATE }
 SKILL_NAME := "dodge" | "dash" | "augmentedAttack" | "spinAttack"
 ```

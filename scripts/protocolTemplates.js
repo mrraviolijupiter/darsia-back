@@ -54,6 +54,7 @@ const isDirection = isOneOf(["N", "E", "S", "W"]);
 const isItemName = isOneOf(["sword", "bow"]);
 const isSkillName = isOneOf(["dash", "dodge", "augmentedAttack", "spinAttack"]);
 const isStartTurnReason = isOneOf(["timeout", "pass", "start_match"]);
+const isMatchState = isOneOf(["lobby", "ready", "started", "finished"]);
 
 const BOARD_COORDINATE = { x: isInteger, y: isInteger };
 const STATS = {
@@ -76,6 +77,12 @@ const CHARACTER_PAWN = {
   equipedItems: [isItemName],
   carriedSkills: [isSkillName]
 };
+const CHEST = {
+  location: BOARD_COORDINATE,
+  droppedBy: isInteger, // 0 if not a dropped chest
+  turnsToOpen: isInteger // 0 means it is open
+};
+
 
 const CHARACTER = {
   id: isInteger,
@@ -85,7 +92,7 @@ const CHARACTER = {
   baseStats: STATS,
   initialItems: [isItemName],
   initialSkills: [isSkillName]
-}
+};
 const copyAsCharacter = source => copyFromTemplate(source, CHARACTER);
 const isCharacter = conformsTo(CHARACTER);
 
@@ -113,10 +120,15 @@ const copyAsStartTurn = source => copyFromTemplate(source, EVENT_START_TURN);
 const isStartTurn = conformsTo(EVENT_START_TURN);
 
 const EVENT_MATCH_INFO = {
-  characters: [CHARACTER],
   turn: TURN,
-  turnOrder: [isInteger]
-}
+  turnOrder: [isInteger],
+  chests: [CHEST],
+  characters: [CHARACTER],
+  clientCharacterId: int,
+  numberOfPlayers: isInteger,
+  state: isMatchState
+};
+
 const copyAsMatchInfo = source => copyFromTemplate(source, EVENT_MATCH_INFO);
 const isMatchInfo = conformsTo(EVENT_MATCH_INFO);
 
@@ -129,4 +141,4 @@ module.exports = {
   isMatchInfo,
   copyAsStartTurn,
   isStartTurn,
-}
+};
