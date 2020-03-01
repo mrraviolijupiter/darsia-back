@@ -124,6 +124,7 @@ const EVENT_MATCH_INFO = {
   turnOrder: [isInteger],
   chests: [CHEST],
   characters: [CHARACTER],
+  clientCharacterId: int,
   numberOfPlayers: isInteger,
   state: isMatchState
 };

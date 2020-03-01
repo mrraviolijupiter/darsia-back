@@ -36,6 +36,7 @@ that we test out the front-back communication
   turnOrder: [int],
   chests: [CHEST],
   characters: [CHARACTER],
+  clientCharacterId: int, // of the client whom requested the match_info
   numberOfPlayers: int,
   state: MATCH_STATE
 }
